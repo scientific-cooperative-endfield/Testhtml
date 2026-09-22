@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#03050a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Сфера Дайсона · 9 миров</title>
+<style>
+:root{--acc:#7fd8ff;--bg:rgba(9,13,24,.82);--bd:rgba(140,190,255,.14);--tx:#e8f0ff;--mut:#8ea0bf;--sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#000;color:var(--tx);font:14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;user-select:none;-webkit-user-select:none;overscroll-behavior:none}
+button{font:inherit}
+#c{position:fixed;inset:0;width:100%;height:100%;touch-action:none;display:block}
+#vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 58%,rgba(0,0,0,.6) 100%)}
+.ui{transition:opacity .3s}
+body.noui .ui{opacity:0!important;pointer-events:none!important}
+#top{position:fixed;left:0;right:0;top:0;padding:calc(var(--st) + 10px) 12px 0;display:flex;align-items:flex-start;gap:8px;pointer-events:none}
+#title{flex:1;min-width:0;pointer-events:auto}
+#title .nm{font-size:19px;font-weight:700;letter-spacing:.2px;text-shadow:0 1px 8px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#title .cl{font-size:12px;color:var(--mut);margin-top:1px;text-shadow:0 1px 6px #000}
+#title .md{display:inline-block;margin-top:6px;font-size:11px;padding:2px 9px;border-radius:10px;background:rgba(0,0,0,.35);border:1px solid var(--acc);color:var(--acc)}
+.ib{pointer-events:auto;width:40px;height:40px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);display:grid;place-items:center;padding:0;cursor:pointer;flex:0 0 auto}
+.ib svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ib.on{color:#00121c;background:var(--acc);border-color:transparent}
+#fps{position:fixed;right:12px;top:calc(var(--st) + 56px);font:11px/1 ui-monospace,Menlo,monospace;color:#9fe0a8;background:rgba(0,0,0,.45);padding:4px 6px;border-radius:6px;pointer-events:none}
+#info{position:fixed;left:10px;right:10px;top:calc(var(--st) + 84px);max-height:50vh;overflow:auto;background:var(--bg);border:1px solid var(--bd);border-radius:16px;padding:12px 14px;transform-origin:top;transition:transform .25s,opacity .25s;-webkit-overflow-scrolling:touch;max-width:520px}
+#info.hid{opacity:0;transform:scale(.97) translateY(-8px);pointer-events:none}
+#info .ih{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+#info .ih b{font-size:16px}
+#info .ih span{color:var(--mut);font-size:12px}
+#info .fact{font-size:12.5px;color:#c6d3ea;margin:6px 0 4px}
+#info table{width:100%;border-collapse:collapse;font-size:12.5px}
+#info td{padding:3px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+#info td:last-child{text-align:right;color:var(--acc);font-variant-numeric:tabular-nums}
+.sec{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--mut);padding:14px 0 4px}
+#bottom{position:fixed;left:0;right:0;bottom:0;padding:0 0 calc(var(--sb) + 8px);pointer-events:none}
+.scroller{display:flex;gap:6px;overflow-x:auto;padding:4px 10px;pointer-events:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.scroller::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;padding:7px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);font-size:12.5px;white-space:nowrap;cursor:pointer}
+.chip.on{background:var(--acc);color:#00121c;border-color:transparent;font-weight:600}
+.card{flex:0 0 auto;width:92px;padding:8px 8px 7px;border-radius:14px;border:1px solid var(--bd);background:var(--bg);cursor:pointer;text-align:left;color:var(--tx);position:relative}
+.card .dot{width:20px;height:20px;border-radius:50%;margin-bottom:6px}
+.card .no{position:absolute;right:8px;top:7px;font-size:10px;color:var(--mut)}
+.card .n{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card .k{font-size:10.5px;color:var(--mut);white-space:nowrap}
+.card.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+#dock{display:flex;gap:8px;justify-content:center;padding:6px 10px 0;pointer-events:none}
+#dock .ib{width:auto;min-width:44px;padding:0 13px;gap:6px;display:flex;align-items:center;font-size:13px}
+#sheet{position:fixed;left:0;right:0;bottom:0;max-height:64vh;display:flex;flex-direction:column;background:rgba(7,10,19,.95);border-top:1px solid var(--bd);border-radius:20px 20px 0 0;transform:translateY(104%);transition:transform .3s cubic-bezier(.2,.8,.2,1);padding-bottom:var(--sb);max-width:640px;margin:0 auto;z-index:5}
+#sheet.open{transform:none}
+#sheetHead{display:flex;align-items:center;gap:6px;padding:8px 10px 4px}
+#sheetHead .grab{flex:1;height:22px;display:grid;place-items:center;cursor:pointer}
+#sheetHead .grab:before{content:"";width:42px;height:5px;border-radius:3px;background:rgba(255,255,255,.22)}
+#tabs{display:flex;gap:4px;padding:2px 10px 8px;overflow-x:auto;scrollbar-width:none}
+#tabs::-webkit-scrollbar{display:none}
+.tab{flex:1 0 auto;padding:8px 10px;border-radius:10px;border:0;background:transparent;color:var(--mut);font-size:13px;font-weight:600;cursor:pointer}
+.tab.on{background:rgba(127,216,255,.13);color:var(--acc)}
+#panes{overflow-y:auto;padding:0 16px 16px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.row{padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.row .lb{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-bottom:4px}
+.row .lb b{font-weight:500}
+.row .lb span{color:var(--acc);font-variant-numeric:tabular-nums;white-space:nowrap}
+.row.tg{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px}
+.row.tg b{font-weight:500}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent;margin:0;touch-action:pan-x}
+input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--acc) var(--p,50%),rgba(255,255,255,.13) var(--p,50%))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;margin-top:-9px;box-shadow:0 1px 6px rgba(0,0,0,.6)}
+input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:rgba(255,255,255,.13)}
+input[type=range]::-moz-range-progress{height:4px;border-radius:2px;background:var(--acc)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;background:#fff}
+.sw{position:relative;width:48px;height:28px;flex:0 0 auto}
+.sw input{opacity:0;position:absolute;inset:0;margin:0;cursor:pointer;z-index:1;width:100%;height:100%}
+.sw i{position:absolute;inset:0;border-radius:14px;background:rgba(255,255,255,.15);transition:.2s}
+.sw i:after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.sw input:checked+i{background:var(--acc)}
+.sw input:checked+i:after{transform:translateX(20px)}
+.seg{display:flex;background:rgba(255,255,255,.06);border-radius:10px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;color:var(--tx);padding:8px 2px;border-radius:8px;font-size:12.5px;cursor:pointer}
+.seg button.on{background:var(--acc);color:#00121c;font-weight:600}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 0 4px}
+.btn{padding:11px 8px;border-radius:12px;border:1px solid var(--bd);background:rgba(127,216,255,.09);color:var(--acc);font-size:13.5px;font-weight:600;cursor:pointer}
+.hint{font-size:12px;color:var(--mut);padding:8px 0;line-height:1.45}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px 0 4px}
+.sgrid button{border:1px solid var(--bd);background:rgba(255,255,255,.04);color:var(--tx);border-radius:12px;padding:9px 4px;cursor:pointer;text-align:center}
+.sgrid button b{display:block;font-size:12.5px;font-weight:600}
+.sgrid button span{display:block;font-size:10.5px;color:var(--mut);margin-top:2px}
+.sgrid button.on{border-color:var(--c);box-shadow:0 0 0 1px var(--c) inset;background:rgba(255,255,255,.08)}
+.sgrid button i{display:block;width:100%;height:3px;border-radius:2px;margin-bottom:6px}
+#fade{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .35s;z-index:8}
+#loader{position:fixed;inset:0;display:grid;place-items:center;background:#000;z-index:9;transition:opacity .6s;text-align:center;padding:20px}
+#loader b{display:block;font-size:17px;letter-spacing:.5px}
+#loader span{display:block;color:var(--mut);font-size:12.5px;margin-top:6px}
+#loader .ring{width:54px;height:54px;border-radius:50%;border:2px solid rgba(127,216,255,.15);border-top-color:var(--acc);animation:sp 1s linear infinite;margin:0 auto 16px}
+@keyframes sp{to{transform:rotate(360deg)}}
+#restore{position:fixed;right:12px;bottom:calc(var(--sb) + 12px);display:none;opacity:.55;z-index:4}
+body.noui #restore{display:grid}
+#toast{position:fixed;left:50%;top:calc(var(--st) + 14px);transform:translate(-50%,-30px);background:var(--bg);border:1px solid var(--bd);padding:8px 14px;border-radius:12px;font-size:13px;opacity:0;transition:.3s;pointer-events:none;z-index:7;white-space:nowrap}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media (min-width:760px){#info{left:12px;right:auto;width:400px}.card{width:108px}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="vig"></div>
+
+<div id="top" class="ui">
+  <div id="title"><div class="nm">—</div><div class="cl"></div><div class="md"></div></div>
+  <button class="ib" id="bInfo" title="Данные"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg></button>
+  <button class="ib" id="bShot" title="Снимок"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg></button>
+  <button class="ib" id="bHide" title="Скрыть интерфейс"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+</div>
+<div id="fps" class="ui"></div>
+<div id="info" class="ui hid"></div>
+
+<div id="bottom" class="ui">
+  <div id="specBar" class="scroller"></div>
+  <div id="starBar" class="scroller"></div>
+  <div id="dock">
+    <button class="ib" id="bSet"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>Настройки</button>
+    <button class="ib" id="bPlay" title="Пауза"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg></button>
+    <button class="ib" id="bCine" title="Кинорежим"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg></button>
+    <button class="ib" id="bReset" title="Сброс вида"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2"/><path d="M4 4v4h4"/></svg></button>
+  </div>
+</div>
+
+<div id="sheet" class="ui">
+  <div id="sheetHead"><div class="grab" id="grab"></div><button class="ib" id="bClose" style="width:34px;height:34px"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div id="tabs"></div>
+  <div id="panes"></div>
+</div>
+
+<button class="ib" id="restore" title="Показать интерфейс"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></button>
+<div id="toast"></div>
+<div id="fade"></div>
+<div id="loader"><div><div class="ring"></div><b>Сборка мегаструктуры…</b><span>Компиляция шейдеров и запекание неба</span></div></div>
+
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+/* =====================================================================
+   ДАННЫЕ: 8 реальных звёзд + квазар
+   ===================================================================== */
+const STARS = [
+  { id:'sun', name:'Солнце', short:'Солнце', en:'Sol', cls:'G2V', T:5772, R:1, L:1, M:1, dist:'8.3 св. минуты',
+    cell:9, conv:1, spots:.5, flare:.3, xr:.5, corona:1, shellK:1, seed:1.37,
+    preset:{type:'hybrid', shell:2.4, layers:2, density:1, size:1},
+    fact:'Жёлтый карлик, эталон всех расчётов: 3.828·10²⁶ Вт. Оболочка на 1 а.е. перехватила бы примерно в 2 млрд раз больше энергии, чем получает Земля.' },
+  { id:'proxima', name:'Проксима Центавра', short:'Проксима', en:'Proxima Centauri', cls:'M5.5Ve', T:3042, R:.1542, L:.00155, M:.122, dist:'4.24 св. года',
+    cell:7, conv:1.6, spots:.9, flare:1.1, xr:1, corona:1.2, shellK:.55, seed:4.11,
+    preset:{type:'shell', shell:2.1, layers:1, density:1.1, size:1},
+    fact:'Ближайшая к нам звезда. Вспыхивающий красный карлик: за минуты яркость растёт в разы, сильнейшие рентгеновские вспышки. Оболочку приходится ставить очень близко.' },
+  { id:'sirius', name:'Сириус A', short:'Сириус A', en:'Sirius A', cls:'A1V', T:9940, R:1.711, L:25.4, M:2.063, dist:'8.6 св. года',
+    cell:14, conv:.6, spots:.04, flare:.05, xr:.08, corona:.6, shellK:1, seed:7.9,
+    preset:{type:'rings', shell:2.6, layers:1, density:1, size:1.1},
+    fact:'Ярчайшая звезда ночного неба. У горячих A‑звёзд почти нет конвективной зоны и короны: в рентгене Сириус A почти невидим, зато ослепителен в УФ.' },
+  { id:'vega', name:'Вега', short:'Вега', en:'Vega', cls:'A0Va', T:9602, R:2.36, L:40.1, M:2.14, dist:'25 св. лет',
+    cell:13, conv:.6, spots:.03, flare:.03, xr:.05, corona:.6, shellK:1, seed:2.63, oblate:.84, grav:1,
+    preset:{type:'swarm', shell:2.7, layers:2, density:1, size:1},
+    fact:'Вращается почти на пределе (период ~12.5 ч): экватор раздут, полюса горячее экватора на ~2000 K (гравитационное потемнение).' },
+  { id:'arcturus', name:'Арктур', short:'Арктур', en:'Arcturus', cls:'K1.5III', T:4286, R:25.4, L:170, M:1.08, dist:'36.7 св. года',
+    cell:5, conv:.8, spots:.25, flare:.05, xr:.1, corona:.8, shellK:1.2, seed:5.52,
+    preset:{type:'swarm', shell:2.3, layers:3, density:1.2, size:1},
+    fact:'Оранжевый гигант на поздней стадии эволюции, в 25 раз больше Солнца. Старая звезда гало, стремительно пересекающая диск Галактики.' },
+  { id:'rigel', name:'Ригель', short:'Ригель', en:'Rigel', cls:'B8Ia', T:12100, R:78.9, L:120000, M:21, dist:'860 св. лет',
+    cell:6, conv:.5, spots:0, flare:.1, xr:.4, corona:1.3, shellK:1.6, seed:9.04,
+    preset:{type:'hybrid', shell:2.9, layers:3, density:1, size:1.25},
+    fact:'Бело‑голубой сверхгигант, в 120 000 раз ярче Солнца, с мощным звёздным ветром. Структуре нужны огромные радиаторы и многослойная защита.' },
+  { id:'betelgeuse', name:'Бетельгейзе', short:'Бетельгейзе', en:'Betelgeuse', cls:'M1‑2Ia', T:3600, R:764, L:126000, M:16.5, dist:'548 св. лет',
+    cell:1.6, conv:.35, spots:.7, flare:0, xr:.03, corona:1.4, shellK:1.5, seed:3.3,
+    preset:{type:'swarm', shell:1.9, layers:4, density:1.3, size:1},
+    fact:'Красный сверхгигант: на месте Солнца достал бы до орбиты Юпитера. На поверхности всего несколько гигантских конвективных ячеек. В 2019–2020 пережил «Великое потускнение».' },
+  { id:'tabby', name:'Звезда Табби', short:'Табби', en:'KIC 8462852', cls:'F3V', T:6750, R:1.58, L:4.68, M:1.43, dist:'1470 св. лет',
+    cell:10, conv:1.1, spots:.3, flare:.2, xr:.3, corona:1, shellK:1, seed:6.66,
+    preset:{type:'swarm', shell:3, layers:2, density:1, size:1.1, build:.28, clumpy:true},
+    fact:'Непериодические провалы блеска до 22%. В 2015 г. гипотеза о мегаструктуре сделала её знаменитой (скорее всего, это пыль). Здесь рой ещё строится.' },
+  { id:'quasar', name:'Квазар 3C 273', short:'Квазар', en:'3C 273', cls:'AGN · z = 0.158', T:0, dist:'2.44 млрд св. лет',
+    preset:{density:1, size:1, build:1},
+    fact:'Первый отождествлённый квазар (1963). Сверхмассивная чёрная дыра ~8.9·10⁸ M☉ поглощает газ и светит в ~4 трлн раз ярче Солнца. Джет тянется на ~200 тыс. св. лет.' },
+];
+
+/* Спектральные режимы: палитры ложного цвета (4 опорных цвета) */
+const MODES = [
+  { name:'Видимый', sub:'380–750 нм', acc:'#7fd8ff' },
+  { name:'ИК тепловой', sub:'10 мкм', acc:'#ff9a4d', pal:[[.02,0,.07],[.5,.04,.42],[.98,.42,.08],[1,.97,.78]] },
+  { name:'Ближний ИК', sub:'1.6 мкм', acc:'#ff6b5a', pal:[[.02,0,0],[.5,.05,.03],[1,.5,.16],[1,.95,.86]] },
+  { name:'Ультрафиолет', sub:'200 нм', acc:'#b48cff', pal:[[0,0,.05],[.24,.05,.58],[.45,.62,1],[.96,.93,1]] },
+  { name:'Рентген', sub:'0.1–10 кэВ', acc:'#7ff0ff', pal:[[0,0,.03],[.04,.2,.48],[.26,.82,.96],[1,1,1]] },
+  { name:'Гамма', sub:'>100 МэВ', acc:'#ff6ad5', pal:[[.01,0,.04],[.38,0,.48],[1,.16,.56],[1,.9,1]] },
+  { name:'Радио', sub:'21 см', acc:'#7dff9a', pal:[[0,.01,.05],[0,.3,.4],[.32,.86,.42],[1,1,.62]] },
+  { name:'Микроволны', sub:'2 мм', acc:'#ffd36b', pal:[[.02,.02,.14],[.12,.38,.88],[.96,.86,.56],[1,.36,.1]] },
+  { name:'H‑альфа', sub:'656.3 нм', acc:'#ff5a6a', pal:[[0,0,0],[.38,0,.03],[1,.16,.1],[1,.82,.76]] },
+];
+const MDS = [
+  'Обычный свет. Снаружи сфера почти чёрная: панели поглощают свет, наружу смотрят радиаторы. Звезда видна только сквозь щели.',
+  'Тепловой ИК — главный признак сферы Дайсона: вся энергия звезды переизлучается как тепло ~300 K. Так их и ищут (IRAS, WISE, проект «Гефест»).',
+  'Ближний ИК. Холодные звёзды ярче; радиаторы тесных (горячих) оболочек начинают светиться.',
+  'Ультрафиолет. Горячие звёзды сияют, красные карлики тусклые, активные области выделяются.',
+  'Рентген. Светит горячая корона и активные области над пятнами. У A‑звёзд короны почти нет.',
+  'Гамма. Звёзды почти невидимы: только самые мощные вспышки.',
+  'Радио. Всплески и магнитная активность. Передатчики энергии сферы и её лучи — ярчайшие объекты.',
+  'Микроволны. Пучки беспроводной передачи энергии и реликтовое излучение (CMB) на фоне.',
+  'H‑альфа 656 нм. Хромосфера, флоккулы и вспышки; эмиссионные туманности на фоне неба.',
+];
+const MDQ = [
+  'Аккреционный диск 10⁴–10⁵ K. Релятивистский Доплер: приближающаяся сторона ярче и голубее. Изображение задней части диска огибает тень дыры.',
+  'Горячая пыль тора (~1000 K) — основной ИК‑источник квазаров. Радиаторы мегаструктуры (~2200 K) сияют.',
+  'Внутренний край пылевого тора и раскалённые радиаторы коллекторов.',
+  '«Большой голубой горб»: внутренний диск отдаёт максимум энергии в УФ.',
+  'Горячая корона над диском (~10⁹ K) и узлы джета. Рентген проходит сквозь тор.',
+  'Гамма от релятивистского джета (эффект блазара). Всё остальное тёмное.',
+  'Синхротронное излучение: джеты и гигантские радиолепестки. Именно так квазары и открыли.',
+  'Джеты, магнитные сопла мегаструктуры и реликтовое излучение на фоне.',
+  'Широкие эмиссионные линии: облака BLR обращаются со скоростями в тысячи км/с.',
+];
+
+const QUAL = {
+  low:   { name:'Низкое',  panels:1800,  oct:3, seg:48,  stars:2500,  sky:1024, dpr:1.25, lines:2, msaa:0 },
+  med:   { name:'Среднее', panels:4200,  oct:4, seg:64,  stars:4500,  sky:2048, dpr:1.6,  lines:3, msaa:0 },
+  high:  { name:'Высокое', panels:8000,  oct:5, seg:96,  stars:7000,  sky:2048, dpr:2,    lines:3, msaa:4 },
+  ultra: { name:'Ультра',  panels:14000, oct:5, seg:128, stars:10000, sky:4096, dpr:2.5,  lines:4, msaa:4 },
+};
+
+/* Веса излучения объектов по режимам [тепло, отражённый/естественный, особый канал] */
+const W = {
+  star:  [[0,1,0],[1,0,.05],[1.1,0,0],[1,0,.5],[.03,0,2.2],[0,0,.9],[.12,0,.9],[.3,0,.35],[.9,0,.8]],
+  panel: [[0,1,0],[1.4,0,.08],[1,.35,0],[0,.35,0],[0,.03,0],[0,0,0],[.06,0,1.1],[.25,0,1.4],[0,.3,0]],
+  frame: [[0,1,0],[.6,0,.2],[.3,.3,.1],[0,.2,.1],[0,0,.05],[0,0,0],[.05,0,.6],[.2,0,.9],[0,.2,0]],
+  bgst:  [[0,1,0],[.6,.1,0],[.8,.4,0],[.05,1.2,0],[0,.05,.02],[0,0,.02],[.03,.03,.05],[.02,.02,.03],[.3,.3,0]],
+  beam:  [.35,.05,.15,0,0,0,1.6,2.2,0],
+  disk:  [1,.35,.6,1.6,.5,.05,.02,.05,.6],
+  dtexp: [0,-1.2,-.5,1.5,3,4,0,0,0],
+  lens:  [1,.3,.5,1.4,.6,.1,.05,.05,.5],
+  xcor:  [.15,0,0,.5,2.5,1.4,.1,0,0],
+  jet:   [.3,.3,.3,.35,1,1.6,2.2,1.3,.05],
+  lobe:  [.02,.05,.02,0,.15,.03,1.8,.7,0],
+  torus: [1,1.6,.8,0,.05,0,.05,.35,.02],
+  torOp: [.92,.75,.8,.97,.3,.05,.08,.35,.85],
+  blr:   [.15,.05,.1,.6,0,0,0,0,2.2],
+  coil:  [1,.3,.3,.2,.1,.05,1.5,1.8,0],
+};
+const ACT_MODE = [0,.2,.1,.7,1,.6,.5,.3,.8];
+
+/* =====================================================================
+   НАСТРОЙКИ
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const isMobile = matchMedia('(pointer:coarse)').matches || /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+const LS_KEY = 'dyson9.v1';
+const DEF = {
+  star:0, mode:0,
+  type:'hybrid', build:1, shell:2.4, density:1, size:1, layers:2, orbit:1, edge:1,
+  frame:true, hubs:true, beams:true, ribbons:true,
+  gran:1, conv:1, spots:.5, flare:.3, corona:1, starBright:1, ghost:false,
+  diskI:1, doppler:1, jetI:1, torus:true,
+  gain:1,
+  quality: isMobile ? 'med' : 'high', bloom:true, bloomStr:.85, bloomRad:.55, exposure:1,
+  adaptive:true, maxDpr: Math.min(window.devicePixelRatio || 1, 2),
+  sky:true, bgStars:true, skyI:1, vignette:true, fps:false, timeScale:1, paused:false,
+  autoRot:true, rotSpeed:.35, cinema:false, fov:50,
+};
+const S = Object.assign({}, DEF);
+try {
+  const s = JSON.parse(localStorage.getItem(LS_KEY) || '{}');
+  for (const k in s) if (k in DEF && typeof s[k] === typeof DEF[k]) S[k] = s[k];
+} catch (e) {}
+S.cinema = false; S.paused = false;
+if (!QUAL[S.quality]) S.quality = DEF.quality;
+if (!(S.star >= 0 && S.star < STARS.length)) S.star = 0;
+if (!(S.mode >= 0 && S.mode < MODES.length)) S.mode = 0;
+let saveT = 0;
+const save = () => { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) {} }, 300); };
+const Q = () => QUAL[S.quality];
+const isQ = () => STARS[S.star].id === 'quasar';
+
+/* =====================================================================
+   УТИЛИТЫ
+   ===================================================================== */
+const clamp01 = x => Math.min(1, Math.max(0, x));
+function bbRaw(T) {
+  T = Math.min(Math.max(T, 1000), 40000) / 100;
+  const r = T <= 66 ? 1 : clamp01(1.29293618 * Math.pow(T - 60, -0.1332047592));
+  const g = T <= 66 ? clamp01(0.39008157876 * Math.log(T) - 0.63184144378) : clamp01(1.12989086 * Math.pow(T - 60, -0.0755148492));
+  const b = T >= 66 ? 1 : (T <= 19 ? 0 : clamp01(0.54320678911 * Math.log(T - 10) - 1.19625408914));
+  return [r, g, b];
+}
+const bbC = (T, out = new THREE.Color()) => { const [r, g, b] = bbRaw(T); return out.setRGB(r * r, g * g, b * b); };
+const cssBB = T => { const [r, g, b] = bbRaw(T); return `rgb(${r * 255 | 0},${g * 255 | 0},${b * 255 | 0})`; };
+const planck = (lam, T) => 1 / (Math.pow(lam, 5) * (Math.exp(0.014388 / (lam * T)) - 1));
+function rng(seed) { let s = (seed * 2654435761) >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
+function randUnit(R, v) { const u = R() * 2 - 1, t = R() * Math.PI * 2, s = Math.sqrt(1 - u * u); return v.set(s * Math.cos(t), u, s * Math.sin(t)); }
+function fib(i, n, v) { const y = 1 - 2 * (i + .5) / n, r = Math.sqrt(1 - y * y), t = i * 2.399963229728653; return v.set(Math.cos(t) * r, y, Math.sin(t) * r); }
+const SUP = { '-':'⁻', 0:'⁰', 1:'¹', 2:'²', 3:'³', 4:'⁴', 5:'⁵', 6:'⁶', 7:'⁷', 8:'⁸', 9:'⁹' };
+function sci(x, d = 2) {
+  if (!isFinite(x) || x === 0) return '0';
+  const e = Math.floor(Math.log10(Math.abs(x)));
+  if (e >= -2 && e < 5) return (+x.toFixed(d)).toLocaleString('ru-RU');
+  return (x / Math.pow(10, e)).toFixed(d) + '·10' + String(e).split('').map(c => SUP[c]).join('');
+}
+
+/* =====================================================================
+   GLSL
+   ===================================================================== */
+const C = /* glsl */`
+uniform float uTime;
+uniform int uMode;
+uniform float uGain;
+uniform vec3 uP0; uniform vec3 uP1; uniform vec3 uP2; uniform vec3 uP3;
+vec3 pal(float t){
+  t=clamp(t,0.,1.);
+  vec3 c=mix(uP0,uP1,smoothstep(0.,.33,t));
+  c=mix(c,uP2,smoothstep(.33,.66,t));
+  c=mix(c,uP3,smoothstep(.66,1.,t));
+  return c*c;
+}
+vec3 fcol(float x){
+  x=max(x*uGain,0.);
+  float t=1.-exp(-x*1.1);
+  return pal(t)*(.06+1.9*t*t+.35*t);
+}
+float luma(vec3 c){ return dot(c,vec3(.2126,.7152,.0722)); }
+float hash11(float n){ return fract(sin(n*12.9898+1.7)*43758.5453); }
+vec3 bb(float T){
+  T=clamp(T,1000.,40000.)/100.;
+  vec3 c;
+  c.r= T<=66. ? 1. : clamp(1.29293618*pow(T-60.,-.1332047592),0.,1.);
+  c.g= T<=66. ? clamp(.39008157876*log(T)-.63184144378,0.,1.) : clamp(1.12989086*pow(T-60.,-.0755148492),0.,1.);
+  c.b= T>=66. ? 1. : (T<=19. ? 0. : clamp(.54320678911*log(T-10.)-1.19625408914,0.,1.));
+  return c*c;
+}
+`;
+const N = /* glsl */`
+#ifndef OCT
+#define OCT 4
+#endif
+vec3 mod289(vec3 x){ return x-floor(x*(1./289.))*289.; }
+vec4 mod289(vec4 x){ return x-floor(x*(1./289.))*289.; }
+vec4 permute(vec4 x){ return mod289(((x*34.)+1.)*x); }
+vec4 taylorInvSqrt(vec4 r){ return 1.79284291400159-.85373472095314*r; }
+float snoise(vec3 v){
+  const vec2 Cn=vec2(1./6.,1./3.);
+  const vec4 D=vec4(0.,.5,1.,2.);
+  vec3 i=floor(v+dot(v,Cn.yyy));
+  vec3 x0=v-i+dot(i,Cn.xxx);
+  vec3 g=step(x0.yzx,x0.xyz);
+  vec3 l=1.-g;
+  vec3 i1=min(g.xyz,l.zxy);
+  vec3 i2=max(g.xyz,l.zxy);
+  vec3 x1=x0-i1+Cn.xxx;
+  vec3 x2=x0-i2+Cn.yyy;
+  vec3 x3=x0-D.yyy;
+  i=mod289(i);
+  vec4 p=permute(permute(permute(i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))+i.x+vec4(0.,i1.x,i2.x,1.));
+  float n_=.142857142857;
+  vec3 ns=n_*D.wyz-D.xzx;
+  vec4 j=p-49.*floor(p*ns.z*ns.z);
+  vec4 x_=floor(j*ns.z);
+  vec4 y_=floor(j-7.*x_);
+  vec4 x=x_*ns.x+ns.yyyy;
+  vec4 y=y_*ns.x+ns.yyyy;
+  vec4 h=1.-abs(x)-abs(y);
+  vec4 b0=vec4(x.xy,y.xy);
+  vec4 b1=vec4(x.zw,y.zw);
+  vec4 s0=floor(b0)*2.+1.;
+  vec4 s1=floor(b1)*2.+1.;
+  vec4 sh=-step(h,vec4(0.));
+  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
+  vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+  vec3 p0=vec3(a0.xy,h.x);
+  vec3 p1=vec3(a0.zw,h.y);
+  vec3 p2=vec3(a1.xy,h.z);
+  vec3 p3=vec3(a1.zw,h.w);
+  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+  p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
+  vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);
+  m=m*m;
+  return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+}
+float fbm(vec3 p){
+  float a=.5, s=0.;
+  for(int i=0;i<OCT;i++){ s+=a*snoise(p); p=p*2.03+vec3(1.7,9.2,3.1); a*=.5; }
+  return s;
+}
+`;
+const T_ = `
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
+`;
+
+/* --- звезда --- */
+const STAR_VS = /* glsl */`
+varying vec3 vP; varying vec3 vNv; varying vec3 vVv;
+void main(){
+  vP=position;
+  vec4 mv=modelViewMatrix*vec4(position,1.);
+  vNv=normalize(normalMatrix*normal);
+  vVv=-mv.xyz;
+  gl_Position=projectionMatrix*mv;
+}`;
+const STAR_FS = /* glsl */`
+${C}
+${N}
+uniform vec3 uColHot; uniform vec3 uColMid; uniform vec3 uColCool;
+uniform float uCell; uniform float uST; uniform float uSpots; uniform float uFlare; uniform float uBright;
+uniform float uGrav; uniform float uBand; uniform float uAct; uniform float uSeed; uniform vec3 uW;
+varying vec3 vP; varying vec3 vNv; varying vec3 vVv;
+void main(){
+  vec3 p=normalize(vP);
+  vec3 Nn=normalize(vNv); vec3 V=normalize(vVv);
+  float mu=clamp(dot(Nn,V),0.,1.);
+  float t=uST;
+  // дифференциальное вращение: экватор быстрее полюсов
+  float rot=t*.015*(1.-.3*p.y*p.y);
+  float cr=cos(rot), sr=sin(rot);
+  vec3 q=vec3(cr*p.x-sr*p.z, p.y, sr*p.x+cr*p.z);
+  vec3 sp=q*uCell;
+  float warp=snoise(sp*.35+vec3(0.,t*.04,uSeed));
+  vec3 gp=sp+warp*.9+uSeed;
+  float gran=fbm(gp+vec3(0.,0.,t*.07));
+  float lanes=1.-abs(snoise(gp*.55+vec3(t*.025)));
+  lanes*=lanes;
+  float g=clamp(mix(gran*.5+.5,lanes,.45),0.,1.);
+  float lat=1.-smoothstep(.3,.75,abs(p.y));
+  float sn=snoise(q*1.7+vec3(uSeed*3.1,uSeed,t*.006))*(.55+.45*lat);
+  float on=step(.001,uSpots);
+  float th=.78-uSpots*.3;
+  float spot=smoothstep(th,th+.1,sn)*on;
+  float umbra=smoothstep(th+.08,th+.16,sn)*on;
+  float fac=smoothstep(th-.25,th-.02,sn)*(1.-spot)*lat*on;
+  float fl=pow(max(snoise(q*3.1+vec3(t*.19,uSeed,-t*.11)),0.),7.)*uFlare*(.65+.35*sin(uTime*3.+sn*9.));
+  float gd=mix(1.,.72+.55*abs(p.y),uGrav);
+  float temp=(g-.5)*1.25+fac*.35-spot*1.1-umbra*.6+(gd-1.)*1.6;
+  vec3 col= temp>0. ? mix(uColMid,uColHot,clamp(temp,0.,1.)) : mix(uColMid,uColCool,clamp(-temp,0.,1.));
+  float om=1.-mu;
+  float limb=max(1.-.62*om-.18*om*om,0.);
+  col=mix(col,col*uColCool/max(uColMid,vec3(.02)),om*.5);
+  float I=limb*(.72+.56*g)*(1.-spot*.55-umbra*.35)*gd+fl*2.4;
+  vec3 nat=col*I*uBright*2.3+pow(om,4.)*uColMid*.3*uBright;
+  vec3 o;
+  if(uMode==0){ o=nat; }
+  else{
+    float act=spot*1.1+umbra*.8+fac*.9+fl*3.;
+    float x=uW.x*uBand*limb*(.72+.56*g)*(1.-spot*.5)*gd+uW.z*uAct*(act+pow(om,3.)*.6+.08);
+    o=fcol(x);
+  }
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+
+/* --- билборды (корона, свечения) --- */
+const BB_VS = /* glsl */`
+uniform float uSize; uniform float uScaleW;
+varying vec2 vQ;
+void main(){
+  vec4 mv=modelViewMatrix*vec4(0.,0.,0.,1.);
+  vQ=position.xy*uSize;
+  mv.xy+=position.xy*uSize*uScaleW;
+  gl_Position=projectionMatrix*mv;
+}`;
+const CORONA_FS = /* glsl */`
+${C}
+${N}
+uniform vec3 uCol; uniform float uInt; uniform float uBand; uniform float uAct; uniform vec3 uW; uniform float uSize;
+varying vec2 vQ;
+void main(){
+  float r=length(vQ);
+  if(r<.97) discard;
+  float h=r-1.;
+  float a=atan(vQ.y,vQ.x);
+  float glow=exp(-h*2.6)*.85+exp(-h*.7)*.22+exp(-h*.18)*.05;
+  float s1=snoise(vec3(cos(a)*2.2,sin(a)*2.2,uTime*.05+h*.45))*.5+.5;
+  float s2=snoise(vec3(cos(a)*6.5,sin(a)*6.5,uTime*.07-h*.7))*.5+.5;
+  float str=(pow(s1,3.)*.7+pow(s2,4.)*.55)*exp(-h*.85);
+  float edge=1.-smoothstep(uSize*.55,uSize,r);
+  float inner=smoothstep(.97,1.02,r);
+  float I=(glow+str*.9)*edge*inner;
+  vec3 o;
+  if(uMode==0) o=uCol*I*uInt;
+  else o=fcol((uW.x*uBand*glow*.45+uW.z*uAct*(glow*.8+str*1.6))*uInt)*edge*inner;
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+const GLOW_FS = /* glsl */`
+${C}
+${N}
+uniform vec3 uCol; uniform float uSize; uniform float uFall; uniform float uNoise; uniform float uInt; uniform float uWm;
+varying vec2 vQ;
+void main(){
+  float r=length(vQ)/uSize;
+  if(r>1.) discard;
+  float I=exp(-r*uFall)*(1.-smoothstep(.6,1.,r));
+  if(uNoise>0.){
+    vec2 q=vQ/uSize;
+    float n=snoise(vec3(q*3.,uTime*.08))*.5+.5;
+    n+=.5*(snoise(vec3(q*7.,uTime*.1+3.))*.5+.5);
+    I*=mix(1.,.25+n,uNoise);
+  }
+  vec3 o= uMode==0 ? uCol*I*uInt*uWm : fcol(I*uWm*uInt);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+
+/* --- панели роя (GPU-орбиты, один draw call) --- */
+const PANEL_VS = /* glsl */`
+attribute vec3 aP0; attribute vec3 aAxis; attribute vec4 aPar; attribute vec2 aSd;
+uniform float uOrb; uniform float uBuild; uniform float uScale; uniform float uR;
+varying vec2 vUv; varying vec3 vN; varying vec3 vW; varying float vFace; varying float vSeed;
+vec3 rotA(vec3 v,vec3 k,float a){ float c=cos(a), s=sin(a); return v*c+cross(k,v)*s+k*dot(k,v)*(1.-c); }
+void main(){
+  float b=clamp((uBuild*1.04-aPar.w)*25.,0.,1.);
+  vSeed=aSd.x;
+  if(b<=0.){ gl_Position=vec4(0.,0.,2.,1.); return; }
+  float fly=1.-b;
+  vec3 P=rotA(aP0,aAxis,uOrb*aPar.x)*(uR*aPar.y)*(1.+fly*fly*.8);
+  vec3 z=normalize(-P);
+  vec3 up= abs(z.y)<.95 ? vec3(0.,1.,0.) : vec3(1.,0.,0.);
+  vec3 x=normalize(cross(up,z)); vec3 y=cross(z,x);
+  float ct=cos(aSd.y), st=sin(aSd.y);
+  vec3 x2=x*ct+y*st; vec3 y2=-x*st+y*ct;
+  float sc=aPar.z*uScale*uR*(.2+.8*b);
+  vec3 wp=P+(x2*position.x+y2*position.y+z*position.z)*sc;
+  vec3 nl=x2*normal.x+y2*normal.y+z*normal.z;
+  vec4 w=modelMatrix*vec4(wp,1.);
+  vW=w.xyz; vN=normalize(mat3(modelMatrix)*nl); vUv=position.xy; vFace=normal.z;
+  gl_Position=projectionMatrix*viewMatrix*w;
+}`;
+const PANEL_FS = /* glsl */`
+${C}
+uniform vec3 uStarCol; uniform float uStarI; uniform float uThermal; uniform float uEdge; uniform vec3 uEdgeCol;
+uniform vec3 uHotCol; uniform float uHotVis; uniform vec3 uW;
+varying vec2 vUv; varying vec3 vN; varying vec3 vW; varying float vFace; varying float vSeed;
+void main(){
+  vec3 Nn=normalize(vN); vec3 L=normalize(-vW); vec3 V=normalize(cameraPosition-vW);
+  vec2 u=vUv;
+  float hx=max(abs(u.x),abs(u.x)*.5+abs(u.y)*.8660254)/.8660254;
+  float border=smoothstep(.86,.93,hx);
+  float ndl=max(dot(Nn,L),0.);
+  vec3 col; float therm;
+  if(vFace>.5){
+    // солнечная сторона: ячейки фотоэлементов
+    vec2 g=abs(fract(u*5.+.5)-.5);
+    float line=smoothstep(.42,.48,max(g.x,g.y));
+    vec3 base=mix(vec3(.015,.03,.09),vec3(.03,.06,.16),vSeed);
+    vec3 H=normalize(L+V);
+    float nh=max(dot(Nn,H),0.);
+    float sp=pow(nh,60.)*1.5+pow(nh,8.)*.08;
+    col=uStarCol*uStarI*(base*ndl*1.2+line*.25*ndl+sp);
+    therm=1.1;
+  } else if(vFace<-.5){
+    // радиаторная сторона: рёбра + навигационные огни
+    float fin=.5+.5*sin(u.x*40.);
+    vec3 base= vSeed>.5 ? vec3(.32,.24,.1) : vec3(.18,.18,.2);
+    float rim=pow(1.-max(dot(Nn,V),0.),3.);
+    col=base*(.06+fin*.02+.05*max(dot(Nn,V),0.))*uStarCol*uStarI+uStarCol*rim*.03*uStarI;
+    col+=uHotCol*uHotVis*(.7+.3*fin);
+    float blink=step(.985,vSeed)*step(.92,fract(uTime*.7+vSeed*13.))*(1.-smoothstep(0.,.12,length(u)));
+    col+=vec3(1.,.15,.1)*blink*6.;
+    therm=.9+.2*fin;
+  } else {
+    col=vec3(.55,.57,.6)*(ndl*uStarI*uStarCol+.03);
+    therm=1.;
+  }
+  col+=uEdgeCol*border*uEdge*(.6+.4*sin(uTime*2.+vSeed*20.));
+  vec3 o;
+  if(uMode==0) o=col;
+  else o=fcol(uW.x*uThermal*therm*(.85+.3*vSeed)+uW.y*luma(col)*3.+uW.z*border*uEdge*1.5);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+
+/* --- обычный меш (кольца, джеты, тор) --- */
+const MESH_VS = /* glsl */`
+varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+void main(){
+  vUv=uv;
+  vec4 w=modelMatrix*vec4(position,1.);
+  vW=w.xyz; vN=normalize(mat3(modelMatrix)*normal);
+  gl_Position=projectionMatrix*viewMatrix*w;
+}`;
+const INST_VS = /* glsl */`
+varying vec2 vUv; varying vec3 vN; varying vec3 vW; varying float vId;
+void main(){
+  vUv=uv;
+  mat4 m=modelMatrix*instanceMatrix;
+  vec4 w=m*vec4(position,1.);
+  vW=w.xyz; vN=normalize(mat3(m)*normal); vId=float(gl_InstanceID);
+  gl_Position=projectionMatrix*viewMatrix*w;
+}`;
+const RIBBON_FS = /* glsl */`
+${C}
+uniform vec3 uStarCol; uniform float uStarI; uniform float uThermal; uniform float uEdge; uniform vec3 uEdgeCol;
+uniform vec3 uHotCol; uniform float uHotVis; uniform vec3 uW; uniform float uSeg;
+varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+void main(){
+  bool outer=gl_FrontFacing;
+  vec3 Nn=normalize(vN); if(!outer) Nn=-Nn;
+  vec3 L=normalize(-vW); vec3 V=normalize(cameraPosition-vW);
+  float ndl=max(dot(Nn,L),0.);
+  float s=fract(vUv.x*uSeg);
+  float seg=smoothstep(0.,.015,s)*smoothstep(1.,.985,s);
+  float rl=smoothstep(.46,.5,abs(fract(vUv.y*4.)-.5));
+  float edge=smoothstep(.06,0.,vUv.y)+smoothstep(.94,1.,vUv.y);
+  float run=pow(fract(vUv.x*8.-uTime*.08),24.);
+  vec3 col;
+  if(!outer){
+    vec3 H=normalize(L+V);
+    col=uStarCol*uStarI*(vec3(.02,.035,.1)*ndl*1.3*seg+pow(max(dot(Nn,H),0.),50.)*1.2)+vec3(.4)*(1.-seg)*ndl*uStarI*.3;
+  } else {
+    col=vec3(.3,.26,.2)*(.06+.03*rl+.04*max(dot(Nn,V),0.))*uStarI*uStarCol+uHotCol*uHotVis*.8;
+    col*=seg*.7+.3;
+  }
+  col+=uEdgeCol*(edge*(.35+run*2.)+(1.-seg)*.15)*uEdge;
+  vec3 o;
+  if(uMode==0) o=col;
+  else o=fcol(uW.x*uThermal*(outer?1.:1.1)+uW.y*luma(col)*3.+uW.z*(edge+run)*uEdge);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+const METAL_FS = /* glsl */`
+${C}
+uniform vec3 uStarCol; uniform float uStarI; uniform float uThermal; uniform vec3 uW; uniform float uLights;
+uniform vec3 uHotCol; uniform float uHotVis;
+varying vec2 vUv; varying vec3 vN; varying vec3 vW; varying float vId;
+void main(){
+  vec3 Nn=normalize(vN); vec3 L=normalize(-vW); vec3 V=normalize(cameraPosition-vW);
+  float ndl=max(dot(Nn,L),0.);
+  vec3 H=normalize(L+V);
+  vec3 col=vec3(.5,.52,.56)*(ndl*uStarI*uStarCol*.9+.035)+pow(max(dot(Nn,H),0.),40.)*uStarCol*uStarI*.7;
+  col+=uHotCol*uHotVis*.6;
+  float h=hash11(vId);
+  float blink=step(.82,fract(uTime*.45+h*7.))*uLights;
+  float away=pow(max(dot(Nn,-L),0.),3.);
+  col+=mix(vec3(.3,.85,1.),vec3(1.,.35,.2),step(.5,h))*blink*away*2.5;
+  vec3 o= uMode==0 ? col : fcol(uW.x*uThermal*1.15+uW.y*luma(col)*3.+uW.z*blink*away);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+const BEAM_FS = /* glsl */`
+${C}
+uniform vec3 uCol; uniform float uWm; uniform float uInt;
+varying vec2 vUv; varying vec3 vN; varying vec3 vW; varying float vId;
+void main(){
+  vec3 V=normalize(cameraPosition-vW);
+  float core=pow(abs(dot(normalize(vN),V)),1.5);
+  float f=fract(vUv.y*10.-uTime*1.6+hash11(vId));
+  float dash=smoothstep(0.,.08,f)*smoothstep(.6,.25,f);
+  float fade=smoothstep(0.,.05,vUv.y)*pow(1.-vUv.y,1.4);
+  float I=core*fade*(.35+dash*.9)*uInt*uWm;
+  vec3 o= uMode==0 ? uCol*I : fcol(I);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+const LINE_VS = /* glsl */`
+attribute float aT; attribute float aR;
+varying float vT; varying float vR;
+void main(){ vT=aT; vR=aR; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`;
+const LINE_FS = /* glsl */`
+${C}
+uniform vec3 uCol; uniform float uInt; uniform vec3 uW;
+varying float vT; varying float vR;
+void main(){
+  float dir= vR>.5 ? 1. : -1.;
+  float p=pow(fract(vT*dir+vR*7.-uTime*(.25+vR*.3)),22.);
+  float I=(.16+p*2.2)*uInt;
+  vec3 o= uMode==0 ? uCol*I : fcol((uW.x*.5+uW.y*.2+uW.z*(.25+p*2.))*uInt);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+
+/* --- небо: запекание в equirect-текстуру один раз --- */
+const BAKE_VS = `varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.,1.); }`;
+const BAKE_FS = /* glsl */`
+${N}
+varying vec2 vUv;
+void main(){
+  float lon=(vUv.x-.5)*6.2831853; float lat=(vUv.y-.5)*3.1415926;
+  vec3 d=vec3(cos(lat)*cos(lon),sin(lat),cos(lat)*sin(lon));
+  float ct=cos(1.05), st=sin(1.05);
+  vec3 g=vec3(d.x,ct*d.y-st*d.z,st*d.y+ct*d.z);
+  float b=asin(clamp(g.y,-1.,1.)); float l=atan(g.z,g.x);
+  float band=exp(-pow(b/.2,2.)); float bandW=exp(-pow(b/.45,2.));
+  float bulge=exp(-(pow(b/.28,2.)+pow(l/.6,2.)));
+  float n1=fbm(g*3.)*.5+.5;
+  float n2=fbm(g*9.+3.)*.5+.5;
+  float stars=clamp(band*(.45+.75*n2)*(.6+.6*n1)+bulge*1.1+bandW*.12,0.,1.);
+  float dl=1.-abs(fbm(g*5.+7.)); dl=pow(dl,4.);
+  float dust=clamp(dl*band*1.6*(.4+n1),0.,1.);
+  float em=pow(max(fbm(g*4.+11.),0.),1.5)*band*1.8+pow(max(snoise(g*12.)-.55,0.),2.)*band*6.;
+  float cmb=fbm(d*6.+20.)*.5+.5;
+  gl_FragColor=vec4(clamp(em,0.,1.),dust,stars,cmb);
+}`;
+const SKY_VS = `varying vec3 vDir; void main(){ vDir=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.); }`;
+const SKY_FS = /* glsl */`
+${C}
+uniform sampler2D uSky; uniform float uSkyI;
+varying vec3 vDir;
+void main(){
+  vec3 d=normalize(vDir);
+  vec2 uv=vec2(atan(d.z,d.x)/6.2831853+.5, asin(clamp(d.y,-1.,1.))/3.1415926+.5);
+  vec4 s=texture2D(uSky,uv);
+  vec3 c;
+  if(uMode==0) c=vec3(1.,.92,.82)*s.b*.11*(1.-s.g*.85)+vec3(.9,.25,.35)*s.r*.05*(1.-s.g)+vec3(.25,.35,.6)*.004;
+  else if(uMode==1) c=fcol(s.g*.9+s.b*.1)*.35;
+  else if(uMode==2) c=fcol(s.b*.5)*.3;
+  else if(uMode==3) c=fcol(s.b*.25*(1.-s.g))*.3;
+  else if(uMode==4) c=fcol(s.r*.2+.02)*.25;
+  else if(uMode==5) c=fcol(s.b*.4)*.3;
+  else if(uMode==6) c=fcol(s.b*.4+s.r*.3+.05)*.35;
+  else if(uMode==7) c=fcol(s.a*1.2)*.45;
+  else c=fcol(s.r*1.2)*.35;
+  gl_FragColor=vec4(c*uSkyI,1.);
+  ${T_}
+}`;
+const STARS_VS = /* glsl */`
+uniform float uTime; uniform float uDpr;
+attribute vec3 aCol; attribute float aSize; attribute float aHot; attribute float aRnd;
+varying vec3 vCol; varying float vHot; varying float vTw;
+void main(){
+  vCol=aCol; vHot=aHot;
+  vTw=.8+.2*sin(uTime*(1.5+aRnd*2.)+aRnd*60.);
+  gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);
+  gl_PointSize=aSize*uDpr;
+}`;
+const STARS_FS = /* glsl */`
+${C}
+uniform vec3 uW; uniform float uInt;
+varying vec3 vCol; varying float vHot; varying float vTw;
+void main(){
+  vec2 d=gl_PointCoord-.5; float r=length(d)*2.;
+  float a=(exp(-r*r*5.)+exp(-r*18.)*.8)*(1.-smoothstep(.8,1.,r))*vTw*uInt;
+  vec3 o= uMode==0 ? vCol*a : fcol(a*luma(vCol)*(uW.x*(1.-vHot)+uW.y*vHot+uW.z)*2.);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+
+/* --- квазар --- */
+const DISK_VS = /* glsl */`
+varying vec3 vL; varying vec3 vW;
+void main(){ vL=position; vec4 w=modelMatrix*vec4(position,1.); vW=w.xyz; gl_Position=projectionMatrix*viewMatrix*w; }`;
+const DISK_FS = /* glsl */`
+${C}
+${N}
+uniform float uRin; uniform float uRout; uniform float uInt; uniform float uWm; uniform float uTexp; uniform float uDop; uniform vec3 uNrm;
+varying vec3 vL; varying vec3 vW;
+float dnoise(vec3 p){ float s=0., a=.5; for(int i=0;i<OCT-1;i++){ s+=a*snoise(p); p=p*2.1+1.3; a*=.5; } return s; }
+void main(){
+  float r=length(vL.xz);
+  float phi=atan(vL.z,vL.x);
+  float x=r/uRin;
+  // профиль Шакуры–Сюняева
+  float prof=pow(x,-.75)*pow(max(1.-sqrt(1./x),0.),.25)*2.2;
+  // две фазы потока, чтобы спирали не закручивались бесконечно
+  float P=10.;
+  float t1=mod(uTime,P), t2=mod(uTime+P*.5,P);
+  float wgt=abs(t1/P*2.-1.);
+  float om=1.6*pow(x,-1.5);
+  float a1=phi+om*t1, a2=phi+om*t2;
+  float lr=log(r)*3.;
+  float n1=dnoise(vec3(cos(a1)*2.,sin(a1)*2.,lr));
+  float n2=dnoise(vec3(cos(a2)*2.,sin(a2)*2.,lr));
+  float n=mix(n1,n2,wgt)*.5+.5;
+  float I=prof*(.45+1.1*n*n)*smoothstep(uRin*.98,uRin*1.25,r)*(1.-smoothstep(uRout*.55,uRout,r));
+  vec3 pw=normalize(vW);
+  vec3 vel=normalize(cross(uNrm,pw));
+  float beta=min(.62*pow(x,-.5),.85);
+  float cosT=dot(vel,normalize(cameraPosition-vW));
+  float D=sqrt(1.-beta*beta)/(1.-beta*cosT);
+  float boost=mix(1.,clamp(pow(D,3.),.03,12.),uDop);
+  float Tt=26000.*prof/2.2*mix(1.,D,uDop);
+  vec3 o;
+  if(uMode==0) o=bb(Tt)*I*boost*uInt*1.6;
+  else o=fcol(uWm*I*boost*pow(max(Tt/15000.,.05),uTexp)*uInt);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+const LENS_FS = /* glsl */`
+${C}
+${N}
+uniform vec3 uNv; uniform vec2 uAppr; uniform float uInt; uniform float uWm; uniform float uSize; uniform float uDop;
+varying vec2 vQ;
+void main(){
+  float r=length(vQ);
+  if(r<1.18) discard;
+  vec2 dir=vQ/r;
+  float ring=exp(-pow((r-1.32)/.03,2.))*1.4+exp(-pow((r-1.34)/.14,2.))*.3;
+  float edgeOn=1.-abs(uNv.z);
+  vec2 n2=normalize(uNv.xy+vec2(1e-4,0.));
+  float al=abs(dot(dir,n2));
+  float arc=smoothstep(1.4,1.75,r)*(1.-smoothstep(2.2,3.6,r));
+  float ang=atan(vQ.y,vQ.x);
+  float nz=snoise(vec3(cos(ang)*3.,sin(ang)*3.,r*2.-uTime*.4))*.5+.5;
+  float lens=arc*pow(al,1.5)*edgeOn*(.4+.9*nz);
+  float side=dot(dir,uAppr)*uDop;
+  float dop=clamp(1.+.75*side,.15,2.);
+  float I=(ring*(.6+.4*edgeOn)+lens*1.1)*dop*(1.-smoothstep(uSize*.7,uSize,r));
+  vec3 o= uMode==0 ? bb(11000.*(1.+.25*side))*I*uInt*1.4 : fcol(uWm*I*uInt);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+const JET_FS = /* glsl */`
+${C}
+${N}
+uniform float uInt; uniform float uWm;
+varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+void main(){
+  vec3 V=normalize(cameraPosition-vW);
+  float core=pow(abs(dot(normalize(vN),V)),2.2);
+  float a=vUv.y;
+  float ang=vUv.x*6.2831853;
+  float n=snoise(vec3(cos(ang)*1.5,sin(ang)*1.5,a*26.-uTime*3.))*.5+.5;
+  float knots=pow(.5+.5*sin(a*55.-uTime*5.),10.);
+  float fade=smoothstep(0.,.02,a)*pow(1.-a,1.3);
+  float I=core*fade*(.35+.75*n+knots*.7)*uInt;
+  vec3 o= uMode==0 ? mix(vec3(.35,.55,1.),vec3(.9,.95,1.),core)*I*uWm*1.4 : fcol(I*uWm*1.4);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+const TORUS_FS = /* glsl */`
+${C}
+${N}
+uniform float uOp; uniform float uWm; uniform vec3 uLightCol;
+varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+void main(){
+  vec3 Nn=normalize(vN); vec3 L=normalize(-vW);
+  float ndl=max(dot(Nn,L),0.);
+  float d=fbm(vW*.12+vec3(0.,uTime*.01,0.))*.5+.5;
+  vec3 nat=vec3(.16,.09,.05)*(.08+ndl*1.4)*uLightCol+vec3(.5,.2,.08)*pow(ndl,6.)*.4;
+  float al=uOp*(.5+.5*d)*smoothstep(0.,.3,d+.1);
+  vec3 o= uMode==0 ? nat*(.6+.6*d) : fcol(uWm*(.25+ndl*1.3)*(.4+d));
+  gl_FragColor=vec4(o,al);
+  ${T_}
+}`;
+const BLR_VS = /* glsl */`
+uniform float uTime; uniform float uDpr; uniform float uPs;
+attribute vec4 aOrb;
+varying float vA;
+void main(){
+  float r=aOrb.x;
+  float ang=aOrb.w+uTime*.42*pow(r/4.,-1.5);
+  vec3 p=vec3(cos(ang)*r,0.,sin(ang)*r);
+  float ci=cos(aOrb.y), si=sin(aOrb.y);
+  p=vec3(p.x,p.y*ci-p.z*si,p.y*si+p.z*ci);
+  float cn=cos(aOrb.z), sn=sin(aOrb.z);
+  p=vec3(cn*p.x+sn*p.z,p.y,-sn*p.x+cn*p.z);
+  vec4 mv=modelViewMatrix*vec4(p,1.);
+  gl_Position=projectionMatrix*mv;
+  gl_PointSize=clamp(uPs*uDpr*60./max(-mv.z,.1),1.,40.);
+  vA=.6+.4*sin(uTime*2.+aOrb.w*9.);
+}`;
+const BLR_FS = /* glsl */`
+${C}
+uniform float uWm; uniform float uInt;
+varying float vA;
+void main(){
+  vec2 d=gl_PointCoord-.5; float r=length(d)*2.;
+  float a=exp(-r*r*4.)*(1.-smoothstep(.7,1.,r))*vA;
+  vec3 o= uMode==0 ? vec3(1.,.55,.6)*a*uWm*uInt : fcol(a*uWm*uInt);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+const COIL_FS = /* glsl */`
+${C}
+uniform vec3 uStarCol; uniform float uStarI; uniform float uWm; uniform float uCount; uniform float uEm;
+varying vec2 vUv; varying vec3 vN; varying vec3 vW; varying float vId;
+void main(){
+  vec3 Nn=normalize(vN); vec3 L=normalize(-vW); vec3 V=normalize(cameraPosition-vW);
+  float ndl=max(dot(Nn,L),0.);
+  vec3 H=normalize(L+V);
+  float k=mod(vId,uCount)/uCount;
+  float p=pow(fract(k-uTime*.45),6.);
+  vec3 col=vec3(.45,.47,.52)*(ndl*uStarI*uStarCol*.8+.03)+pow(max(dot(Nn,H),0.),40.)*uStarCol*uStarI*.6;
+  col+=mix(vec3(.25,.65,1.),vec3(1.,.3,.85),k)*(.18+p*2.6)*uEm;
+  vec3 o= uMode==0 ? col : fcol(uWm*(.15+p*2.)*uEm+luma(col)*.2);
+  gl_FragColor=vec4(o,1.);
+  ${T_}
+}`;
+
+/* =====================================================================
+   РЕНДЕРЕР, СЦЕНА, КАМЕРА
+   ===================================================================== */
+const canvas = $('#c');
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: Q().msaa > 0, powerPreference: 'high-performance', stencil: false });
+} catch (e) {
+  $('#loader').innerHTML = '<div><b>WebGL 2 недоступен</b><span>Откройте страницу в свежем Chrome / Safari</span></div>';
+  throw e;
+}
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = S.exposure;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+let dpr = Math.min(S.maxDpr, Q().dpr, window.devicePixelRatio || 1);
+renderer.setPixelRatio(dpr);
+renderer.setSize(innerWidth, innerHeight, false);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(S.fov, innerWidth / innerHeight, .02, 4000);
+camera.position.set(0, 2.2, 10);
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true; controls.dampingFactor = .07;
+controls.rotateSpeed = .6; controls.zoomSpeed = .9; controls.enablePan = false;
+controls.autoRotate = S.autoRot; controls.autoRotateSpeed = S.rotSpeed;
+
+/* Общие uniform-объекты: одно изменение — во всех материалах */
+const G = {
+  uTime:{value:0}, uMode:{value:0}, uGain:{value:S.gain},
+  uP0:{value:new THREE.Vector3()}, uP1:{value:new THREE.Vector3()}, uP2:{value:new THREE.Vector3()}, uP3:{value:new THREE.Vector3()},
+};
+const ALL = [];
+const REG = [];
+function SM(vs, fs, u = {}, o = {}) {
+  const m = new THREE.ShaderMaterial(Object.assign({ vertexShader:vs, fragmentShader:fs, uniforms:Object.assign({}, G, u), defines:{ OCT:Q().oct } }, o));
+  ALL.push(m); return m;
+}
+const reg = (mat, key, table) => REG.push({ mat, key, table });
+const ADD = { transparent:true, blending:THREE.AdditiveBlending, depthWrite:false };
+const V3 = () => ({ value:new THREE.Vector3() });
+const mkLight = () => ({
+  uStarCol:{value:new THREE.Color(1,1,1)}, uStarI:{value:1}, uThermal:{value:1},
+  uHotCol:{value:new THREE.Color(1,.5,.2)}, uHotVis:{value:0},
+  uEdge:{value:S.edge}, uEdgeCol:{value:new THREE.Color(.3,.75,1)},
+});
+const LS = mkLight(), LQ = mkLight();
+LQ.uEdgeCol.value.set(.75,.5,1);
+
+/* --- фон --- */
+const skyGroup = new THREE.Group(); scene.add(skyGroup);
+const skyMat = SM(SKY_VS, SKY_FS, { uSky:{value:null}, uSkyI:{value:S.skyI} }, { side:THREE.BackSide, depthWrite:false, depthTest:false });
+const sky = new THREE.Mesh(new THREE.SphereGeometry(900, 48, 24), skyMat);
+sky.renderOrder = -10; sky.frustumCulled = false; skyGroup.add(sky);
+let skyRT = null;
+function bakeSky() {
+  const w = Math.min(Q().sky, renderer.capabilities.maxTextureSize);
+  if (skyRT) skyRT.dispose();
+  skyRT = new THREE.WebGLRenderTarget(w, w / 2, { depthBuffer:false });
+  const m = new THREE.ShaderMaterial({ vertexShader:BAKE_VS, fragmentShader:BAKE_FS, defines:{ OCT:6 }, depthTest:false, depthWrite:false });
+  const sc = new THREE.Scene(), qd = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), m);
+  qd.frustumCulled = false; sc.add(qd);
+  renderer.setRenderTarget(skyRT);
+  renderer.render(sc, new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1));
+  renderer.setRenderTarget(null);
+  m.dispose(); qd.geometry.dispose();
+  skyMat.uniforms.uSky.value = skyRT.texture;
+}
+const starsMat = SM(STARS_VS, STARS_FS, { uDpr:{value:dpr}, uW:V3(), uInt:{value:1} }, ADD);
+reg(starsMat, 'uW', W.bgst);
+let bgStars = null;
+function buildStarfield() {
+  if (bgStars) { skyGroup.remove(bgStars); bgStars.geometry.dispose(); }
+  const n = Q().stars, R = rng(7);
+  const pos = new Float32Array(n * 3), col = new Float32Array(n * 3), size = new Float32Array(n), hot = new Float32Array(n), rnd = new Float32Array(n);
+  const v = new THREE.Vector3(), c = new THREE.Color(), ct = Math.cos(1.05), st = Math.sin(1.05);
+  for (let i = 0; i < n; i++) {
+    randUnit(R, v);
+    if (R() < .5) for (let k = 0; k < 8; k++) { const gy = ct * v.y - st * v.z; if (R() < Math.exp(-((gy / .22) ** 2))) break; randUnit(R, v); }
+    pos.set([v.x * 800, v.y * 800, v.z * 800], i * 3);
+    const T = R() < .7 ? 2800 + R() * 3400 : 6000 + Math.pow(R(), 2) * 22000;
+    bbC(T, c);
+    const b = .22 + Math.pow(R(), 14) * 3.2;
+    col.set([c.r * b, c.g * b, c.b * b], i * 3);
+    size[i] = 1.2 + Math.pow(R(), 10) * 4.2;
+    hot[i] = clamp01((T - 3000) / 15000);
+    rnd[i] = R();
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('aCol', new THREE.BufferAttribute(col, 3));
+  g.setAttribute('aSize', new THREE.BufferAttribute(size, 1));
+  g.setAttribute('aHot', new THREE.BufferAttribute(hot, 1));
+  g.setAttribute('aRnd', new THREE.BufferAttribute(rnd, 1));
+  bgStars = new THREE.Points(g, starsMat);
+  bgStars.frustumCulled = false; bgStars.renderOrder = -9;
+  bgStars.visible = S.bgStars;
+  skyGroup.add(bgStars);
+}
+
+/* =====================================================================
+   ЗВЕЗДА И ЕЁ МЕГАСТРУКТУРА
+   ===================================================================== */
+const starRoot = new THREE.Group(); scene.add(starRoot);
+const structGroup = new THREE.Group(); starRoot.add(structGroup);
+const frameGroup = new THREE.Group(); structGroup.add(frameGroup);
+const ringGroup = new THREE.Group(); structGroup.add(ringGroup);
+
+const starMat = SM(STAR_VS, STAR_FS, {
+  uColHot:{value:new THREE.Color()}, uColMid:{value:new THREE.Color()}, uColCool:{value:new THREE.Color()},
+  uCell:{value:8}, uST:{value:0}, uSpots:{value:.5}, uFlare:{value:.3}, uBright:{value:1},
+  uGrav:{value:0}, uBand:{value:1}, uAct:{value:.5}, uSeed:{value:1}, uW:V3(),
+});
+reg(starMat, 'uW', W.star);
+const starMesh = new THREE.Mesh(new THREE.SphereGeometry(1, Q().seg, Q().seg / 2 | 0), starMat);
+starRoot.add(starMesh);
+
+const coronaMat = SM(BB_VS, CORONA_FS, {
+  uCol:{value:new THREE.Color()}, uInt:{value:1}, uBand:{value:1}, uAct:{value:.5}, uW:V3(), uSize:{value:7}, uScaleW:{value:1},
+}, ADD);
+reg(coronaMat, 'uW', W.star);
+const corona = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), coronaMat);
+corona.frustumCulled = false; corona.renderOrder = 5; starRoot.add(corona);
+
+const ghost = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(1, 2)),
+  new THREE.LineBasicMaterial({ color:0xffcc66, transparent:true, opacity:.55, depthWrite:false }));
+ghost.renderOrder = 6; ghost.visible = S.ghost; starRoot.add(ghost);
+
+const hexBase = (() => { const g = new THREE.CylinderGeometry(1, 1, .035, 6, 1, false); g.rotateX(Math.PI / 2); return g; })();
+const panelMat = SM(PANEL_VS, PANEL_FS, Object.assign({
+  uOrb:{value:0}, uBuild:{value:1}, uScale:{value:1}, uR:{value:2.4}, uW:V3(),
+}, LS));
+reg(panelMat, 'uW', W.panel);
+const ribbonMat = SM(MESH_VS, RIBBON_FS, Object.assign({ uW:V3(), uSeg:{value:90} }, LS), { side:THREE.DoubleSide });
+reg(ribbonMat, 'uW', W.panel);
+const strutMat = SM(INST_VS, METAL_FS, Object.assign({ uW:V3(), uLights:{value:0} }, LS));
+const hubMat = SM(INST_VS, METAL_FS, Object.assign({ uW:V3(), uLights:{value:1} }, LS));
+reg(strutMat, 'uW', W.panel); reg(hubMat, 'uW', W.panel);
+const lineMat = SM(LINE_VS, LINE_FS, { uCol:{value:new THREE.Color(.35,.75,1)}, uInt:{value:1}, uW:V3() }, ADD);
+reg(lineMat, 'uW', W.frame);
+const beamMat = SM(INST_VS, BEAM_FS, { uCol:{value:new THREE.Color(.6,.9,1)}, uWm:{value:1}, uInt:{value:1} }, Object.assign({ side:THREE.DoubleSide }, ADD));
+reg(beamMat, 'uWm', W.beam);
+
+function makeSwarmMesh(d, mat) {
+  const g = new THREE.InstancedBufferGeometry();
+  g.index = hexBase.index;
+  g.setAttribute('position', hexBase.attributes.position);
+  g.setAttribute('normal', hexBase.attributes.normal);
+  g.setAttribute('aP0', new THREE.InstancedBufferAttribute(d.p0, 3));
+  g.setAttribute('aAxis', new THREE.InstancedBufferAttribute(d.ax, 3));
+  g.setAttribute('aPar', new THREE.InstancedBufferAttribute(d.par, 4));
+  g.setAttribute('aSd', new THREE.InstancedBufferAttribute(d.sd, 2));
+  g.instanceCount = d.n;
+  const m = new THREE.Mesh(g, mat);
+  m.frustumCulled = false;
+  return m;
+}
+function disposeSwarm(m) {
+  if (!m) return;
+  if (m.parent) m.parent.remove(m);
+  // общие буферы шестиугольника не освобождаем: отцепляем их до dispose
+  m.geometry.deleteAttribute('position'); m.geometry.deleteAttribute('normal'); m.geometry.index = null;
+  m.geometry.dispose();
+}
+
+const SHELL_SPEED = .1, RING_SPEED = .22;
+/* Генератор роя: рой, кольца, оболочка, гибрид. Все орбиты считаются в вершинном шейдере. */
+function genSwarm({ n, type, layers, clumpy, seed }) {
+  const R = rng(seed);
+  const p0 = new Float32Array(n * 3), ax = new Float32Array(n * 3), par = new Float32Array(n * 4), sd = new Float32Array(n * 2);
+  let c = 0;
+  const push = (p, a, spd, rm, size, rank, tw) => {
+    if (c >= n) return;
+    p0[c*3] = p.x; p0[c*3+1] = p.y; p0[c*3+2] = p.z;
+    ax[c*3] = a.x; ax[c*3+1] = a.y; ax[c*3+2] = a.z;
+    par[c*4] = spd; par[c*4+1] = rm; par[c*4+2] = size; par[c*4+3] = rank;
+    sd[c*2] = R(); sd[c*2+1] = tw; c++;
+  };
+  const L = Math.max(1, layers | 0);
+  let nShell = 0, nSwarm = 0, nRing = 0;
+  if (type === 'shell') nShell = n;
+  else if (type === 'swarm') nSwarm = n;
+  else if (type === 'rings') nRing = n;
+  else { nRing = Math.round(n * .35); nShell = Math.round(n * .25); nSwarm = n - nRing - nShell; }
+  const v = new THREE.Vector3(), a = new THREE.Vector3(), tmp = new THREE.Vector3(), Y = new THREE.Vector3(0, 1, 0);
+
+  const ringNs = []; const ringW = type === 'rings' ? .12 : .09;
+  if (nRing) {
+    const k = type === 'rings' ? 6 : 3;
+    for (let i = 0; i < k; i++) {
+      const inc = type === 'rings' ? (i + .5) / k * Math.PI : [0, .5, .5][i];
+      const node = type === 'rings' ? i * 2.39996 : [0, 0, Math.PI][i];
+      ringNs.push(new THREE.Vector3(Math.sin(inc) * Math.cos(node), Math.cos(inc), Math.sin(inc) * Math.sin(node)).normalize());
+    }
+    const per = Math.floor(nRing / k);
+    for (let i = 0; i < k; i++) {
+      const nk = ringNs[i];
+      const u = new THREE.Vector3().crossVectors(nk, Math.abs(nk.y) < .9 ? Y : new THREE.Vector3(1, 0, 0)).normalize();
+      const w = new THREE.Vector3().crossVectors(nk, u);
+      const size = Math.sqrt(.95 * 2 * Math.PI * ringW / (per / L * 2.598));
+      for (let j = 0; j < per; j++) {
+        const rm = 1 + (j % L) * .13 + i * .012;
+        const t = j / per * Math.PI * 2, o = (R() - .5) * ringW;
+        v.copy(u).multiplyScalar(Math.cos(t)).addScaledVector(w, Math.sin(t)).addScaledVector(nk, o).normalize();
+        push(v, nk, RING_SPEED * Math.pow(rm, -1.5), rm, size * (.9 + R() * .2), (j / per) * .9 + R() * .1, 0);
+      }
+    }
+  }
+  // оболочка; в гибриде — только полярные шапки |y|>0.55 (45% площади сферы)
+  if (nShell) {
+    const caps = type === 'hybrid', per = Math.floor(nShell / L);
+    for (let l = 0; l < L; l++) {
+      const rm = 1 + l * .13, cnt = caps ? Math.round(per / .45) : per;
+      const size = Math.sqrt(1.05 * 4 * Math.PI / (cnt * 2.598));
+      for (let j = 0; j < cnt; j++) {
+        fib(j, cnt, v);
+        if (caps && Math.abs(v.y) < .55) continue;
+        push(v, Y, SHELL_SPEED * Math.pow(rm, -1.5), rm, size, ((1 - v.y) / 2) * .9 + R() * .1, 0);
+      }
+    }
+  }
+  // свободный рой; у звезды Табби — неоднородные сгустки
+  if (nSwarm) {
+    const size = Math.sqrt(.55 * 4 * Math.PI / (nSwarm / L * 2.598));
+    const cl = clumpy ? Array.from({ length: 6 }, () => {
+      const cc = randUnit(R, new THREE.Vector3());
+      return { c: cc, a: new THREE.Vector3().crossVectors(cc, randUnit(R, tmp)).normalize(), s: .15 + R() * .1 };
+    }) : null;
+    for (let j = 0; j < nSwarm; j++) {
+      const rm = 1 + (j % L) * .13 + (R() - .5) * .03;
+      if (cl && R() < .82) {
+        const k = cl[(R() * cl.length) | 0];
+        v.copy(k.c).addScaledVector(randUnit(R, tmp), .12 + R() * .3).normalize();
+        a.copy(k.a).addScaledVector(v, -k.a.dot(v)).normalize();
+        push(v, a, k.s * Math.pow(rm, -1.5), rm, size * (.8 + R() * .5), R(), R() * 6.283);
+      } else {
+        fib(j, nSwarm, v); v.addScaledVector(randUnit(R, tmp), .015).normalize();
+        a.crossVectors(v, randUnit(R, tmp)).normalize();
+        push(v, a, (.16 + R() * .1) * Math.pow(rm, -1.5), rm, size * (.75 + R() * .5), R(), R() * 6.283);
+      }
+    }
+  }
+  return { p0, ax, par, sd, n: c, ringNs, ringW };
+}
+
+/* Геодезическая решётка */
+function icoData(detail) {
+  const g = new THREE.IcosahedronGeometry(1, detail), pos = g.attributes.position;
+  const verts = [], idx = [], map = new Map();
+  for (let i = 0; i < pos.count; i++) {
+    const v = new THREE.Vector3().fromBufferAttribute(pos, i).normalize();
+    const k = `${Math.round(v.x * 1e4)},${Math.round(v.y * 1e4)},${Math.round(v.z * 1e4)}`;
+    if (!map.has(k)) { map.set(k, verts.length); verts.push(v); }
+    idx.push(map.get(k));
+  }
+  const seen = new Set(), E = [];
+  for (let i = 0; i < idx.length; i += 3) for (let e = 0; e < 3; e++) {
+    const a = idx[i + e], b = idx[i + (e + 1) % 3], k = a < b ? a + '_' + b : b + '_' + a;
+    if (!seen.has(k)) { seen.add(k); E.push([a, b]); }
+  }
+  g.dispose();
+  return { verts, E };
+}
+const boxGeo = new THREE.BoxGeometry(1, 1, 1);
+const hubGeo = (() => {
+  const t = new THREE.TorusGeometry(1, .22, 6, 18);
+  const s = new THREE.SphereGeometry(.5, 10, 8);
+  const c = new THREE.CylinderGeometry(.12, .12, 2.6, 6); c.rotateX(Math.PI / 2);
+  return mergeGeometries([t, s, c]);
+})();
+const beamGeo = (() => { const g = new THREE.CylinderGeometry(.03, .008, 1, 8, 1, true); g.translate(0, .5, 0); return g; })();
+const _m4 = new THREE.Matrix4(), _q = new THREE.Quaternion(), _v = new THREE.Vector3(), _s = new THREE.Vector3();
+const Yax = new THREE.Vector3(0, 1, 0), Zax = new THREE.Vector3(0, 0, 1);
+let frameLines = null, frameStruts = null, frameHubs = null, frameBeams = null;
+
+function buildFrame() {
+  if (frameLines) { frameGroup.remove(frameLines); frameLines.geometry.dispose(); }
+  for (const o of [frameStruts, frameHubs, frameBeams]) if (o) { frameGroup.remove(o); o.dispose(); }
+  const d = icoData(Q().lines);
+  const pos = new Float32Array(d.E.length * 6), at = new Float32Array(d.E.length * 2), ar = new Float32Array(d.E.length * 2);
+  const R = rng(99);
+  d.E.forEach(([a, b], i) => {
+    const A = d.verts[a], B = d.verts[b];
+    pos.set([A.x, A.y, A.z, B.x, B.y, B.z], i * 6);
+    at[i * 2] = 0; at[i * 2 + 1] = 1; ar[i * 2] = ar[i * 2 + 1] = R();
+  });
+  const lg = new THREE.BufferGeometry();
+  lg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  lg.setAttribute('aT', new THREE.BufferAttribute(at, 1));
+  lg.setAttribute('aR', new THREE.BufferAttribute(ar, 1));
+  frameLines = new THREE.LineSegments(lg, lineMat); frameLines.frustumCulled = false; frameLines.renderOrder = 4;
+
+  const d1 = icoData(1);
+  frameStruts = new THREE.InstancedMesh(boxGeo, strutMat, d1.E.length);
+  d1.E.forEach(([a, b], i) => {
+    const A = d1.verts[a], B = d1.verts[b];
+    _v.addVectors(A, B).multiplyScalar(.5);
+    const dir = B.clone().sub(A), len = dir.length();
+    _q.setFromUnitVectors(Yax, dir.normalize());
+    frameStruts.setMatrixAt(i, _m4.compose(_v, _q, _s.set(.008, len, .008)));
+  });
+  frameHubs = new THREE.InstancedMesh(hubGeo, hubMat, d1.verts.length);
+  d1.verts.forEach((p, i) => { _q.setFromUnitVectors(Zax, p); frameHubs.setMatrixAt(i, _m4.compose(p, _q, _s.setScalar(.045))); });
+  const bIdx = d1.verts.map((p, i) => i).filter(i => i % 5 === 0);
+  frameBeams = new THREE.InstancedMesh(beamGeo, beamMat, bIdx.length);
+  bIdx.forEach((vi, i) => { const p = d1.verts[vi]; _q.setFromUnitVectors(Yax, p); frameBeams.setMatrixAt(i, _m4.compose(p, _q, _s.set(1, 2.4, 1))); });
+  frameBeams.renderOrder = 4;
+  for (const o of [frameStruts, frameHubs, frameBeams]) { o.frustumCulled = false; o.instanceMatrix.needsUpdate = true; }
+  frameGroup.add(frameLines, frameStruts, frameHubs, frameBeams);
+  updateVis();
+}
+
+const ribbonGeo = new THREE.CylinderGeometry(1, 1, 1, 256, 1, true);
+let ribbons = [], swarm = null, ringInfo = { ns:[], w:.1 };
+function buildRibbons(ns, w) {
+  for (const r of ribbons) ringGroup.remove(r);
+  ribbons = ns.map((n, i) => {
+    const m = new THREE.Mesh(ribbonGeo, ribbonMat);
+    m.userData = { q: new THREE.Quaternion().setFromUnitVectors(Yax, n), i };
+    ringGroup.add(m); return m;
+  });
+  ringInfo = { ns, w };
+}
+
+function rebuildStructure() {
+  const st = STARS[S.star]; if (st.id === 'quasar') return;
+  disposeSwarm(swarm);
+  const d = genSwarm({ n: Math.round(Q().panels * S.density), type: S.type, layers: S.layers, clumpy: !!st.preset.clumpy, seed: 1000 + S.star * 77 });
+  swarm = makeSwarmMesh(d, panelMat);
+  structGroup.add(swarm);
+  buildRibbons(d.ringNs, d.ringW);
+  updateShell(); updateVis();
+}
+function updateShell() {
+  panelMat.uniforms.uR.value = S.shell;
+  frameGroup.scale.setScalar(S.shell * .965);
+  for (const r of ribbons) { const k = S.shell * (1.05 + r.userData.i * .012); r.scale.set(k, ringInfo.w * S.shell * .45, k); }
+}
+const qParts = {};
+function updateVis() {
+  if (frameLines) { frameLines.visible = S.frame; frameStruts.visible = S.frame; frameHubs.visible = S.hubs; frameBeams.visible = S.beams; }
+  ringGroup.visible = S.ribbons;
+  if (qParts.wheelRibbons) { for (const r of qParts.wheelRibbons) r.visible = S.ribbons; qParts.hubs.visible = S.hubs; qParts.spokes.visible = S.hubs; }
+  if (qParts.torus) qParts.torus.visible = S.torus;
+}
+
+/* =====================================================================
+   КВАЗАР + «ДВИГАТЕЛЬ ПЕНРОУЗА–КАРДАШЁВА»
+   ===================================================================== */
+const quasarRoot = new THREE.Group(); scene.add(quasarRoot); quasarRoot.visible = false;
+const qPanelMat = SM(PANEL_VS, PANEL_FS, Object.assign({ uOrb:{value:0}, uBuild:{value:1}, uScale:{value:1}, uR:{value:1}, uW:V3() }, LQ));
+const qRibbonMat = SM(MESH_VS, RIBBON_FS, Object.assign({ uW:V3(), uSeg:{value:160} }, LQ), { side:THREE.DoubleSide });
+const qMetalMat = SM(INST_VS, METAL_FS, Object.assign({ uW:V3(), uLights:{value:1} }, LQ));
+const diskMat = SM(DISK_VS, DISK_FS, { uRin:{value:2.6}, uRout:{value:20}, uInt:{value:1}, uWm:{value:1}, uTexp:{value:0}, uDop:{value:1}, uNrm:{value:new THREE.Vector3(0,1,0)} },
+  Object.assign({ side:THREE.DoubleSide }, ADD));
+const lensMat = SM(BB_VS, LENS_FS, { uNv:V3(), uAppr:{value:new THREE.Vector2(1,0)}, uInt:{value:1}, uWm:{value:1}, uSize:{value:4.2}, uScaleW:{value:1}, uDop:{value:1} }, ADD);
+const xcorMat = SM(BB_VS, GLOW_FS, { uCol:{value:new THREE.Color(.6,.8,1)}, uSize:{value:3.2}, uScaleW:{value:1}, uFall:{value:4}, uNoise:{value:.4}, uInt:{value:1}, uWm:{value:1} }, ADD);
+const lobeMat = SM(BB_VS, GLOW_FS, { uCol:{value:new THREE.Color(.5,.6,1)}, uSize:{value:28}, uScaleW:{value:1}, uFall:{value:1.6}, uNoise:{value:1}, uInt:{value:1}, uWm:{value:1} }, ADD);
+const jetMat = SM(MESH_VS, JET_FS, { uInt:{value:1}, uWm:{value:1} }, Object.assign({ side:THREE.DoubleSide }, ADD));
+const torusMat = SM(MESH_VS, TORUS_FS, { uOp:{value:.9}, uWm:{value:1}, uLightCol:{value:new THREE.Color(.8,.85,1)} }, { transparent:true, depthWrite:false });
+const blrMat = SM(BLR_VS, BLR_FS, { uDpr:{value:dpr}, uPs:{value:3}, uWm:{value:1}, uInt:{value:1} }, ADD);
+const coilMat = SM(INST_VS, COIL_FS, { uStarCol:LQ.uStarCol, uStarI:LQ.uStarI, uWm:{value:1}, uCount:{value:10}, uEm:{value:1} });
+reg(qPanelMat, 'uW', W.panel); reg(qRibbonMat, 'uW', W.panel); reg(qMetalMat, 'uW', W.panel);
+reg(diskMat, 'uWm', W.disk); reg(diskMat, 'uTexp', W.dtexp); reg(lensMat, 'uWm', W.lens); reg(xcorMat, 'uWm', W.xcor);
+reg(lobeMat, 'uWm', W.lobe); reg(jetMat, 'uWm', W.jet); reg(torusMat, 'uWm', W.torus); reg(torusMat, 'uOp', W.torOp);
+reg(blrMat, 'uWm', W.blr); reg(coilMat, 'uWm', W.coil);
+
+const Q_RINGS = [{ r:40, h:2.2, tilt:0 }, { r:53, h:3.2, tilt:.06 }, { r:68, h:2.4, tilt:-.05 }];
+function buildQuasar() {
+  const bh = new THREE.Mesh(new THREE.SphereGeometry(1.2, 48, 32), new THREE.MeshBasicMaterial({ color:0 }));
+  quasarRoot.add(bh);
+  const disk = new THREE.Mesh(new THREE.RingGeometry(2.6, 20, 192, 8).rotateX(-Math.PI / 2), diskMat);
+  disk.renderOrder = 1; quasarRoot.add(disk);
+  const lens = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), lensMat); lens.frustumCulled = false; lens.renderOrder = 2; quasarRoot.add(lens);
+  const xc = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), xcorMat); xc.frustumCulled = false; xc.renderOrder = 2; quasarRoot.add(xc);
+  const jg = new THREE.CylinderGeometry(4.5, .35, 90, 24, 30, true); jg.translate(0, 45, 0);
+  const jA = new THREE.Mesh(jg, jetMat), jB = new THREE.Mesh(jg, jetMat); jB.rotation.x = Math.PI;
+  jA.renderOrder = jB.renderOrder = 4; quasarRoot.add(jA, jB);
+  for (const s of [1, -1]) { const l = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), lobeMat); l.position.set(0, s * 98, 0); l.frustumCulled = false; l.renderOrder = 4; quasarRoot.add(l); }
+  const tg = new THREE.TorusGeometry(27, 8, 24, 96); tg.rotateX(Math.PI / 2); tg.scale(1, .5, 1);
+  qParts.torus = new THREE.Mesh(tg, torusMat); qParts.torus.renderOrder = 3; quasarRoot.add(qParts.torus);
+
+  // облака широких линий (BLR)
+  const nB = 2600, R = rng(31), orb = new Float32Array(nB * 4);
+  for (let i = 0; i < nB; i++) orb.set([3.5 + Math.pow(R(), 1.5) * 8, (R() - .5) * 1.4, R() * 6.283, R() * 6.283], i * 4);
+  const bg = new THREE.BufferGeometry();
+  bg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(nB * 3), 3));
+  bg.setAttribute('aOrb', new THREE.BufferAttribute(orb, 4));
+  const blr = new THREE.Points(bg, blrMat); blr.frustumCulled = false; blr.renderOrder = 2; quasarRoot.add(blr);
+
+  // несущее «колесо»: кольца, спицы, узлы
+  const wheel = new THREE.Group(); quasarRoot.add(wheel); qParts.wheel = wheel;
+  qParts.wheelRibbons = Q_RINGS.map(o => { const m = new THREE.Mesh(ribbonGeo, qRibbonMat); m.scale.set(o.r, o.h, o.r); m.rotation.x = o.tilt; wheel.add(m); return m; });
+  const nS = 24;
+  qParts.spokes = new THREE.InstancedMesh(boxGeo, qMetalMat, nS);
+  qParts.hubs = new THREE.InstancedMesh(hubGeo, qMetalMat, nS * 3);
+  for (let k = 0; k < nS; k++) {
+    const a = k / nS * Math.PI * 2, dir = new THREE.Vector3(Math.cos(a), 0, Math.sin(a));
+    _q.setFromUnitVectors(Yax, dir);
+    qParts.spokes.setMatrixAt(k, _m4.compose(_v.copy(dir).multiplyScalar(54), _q, _s.set(.3, 28, .3)));
+    Q_RINGS.forEach((o, j) => { _q.setFromUnitVectors(Zax, dir); qParts.hubs.setMatrixAt(k * 3 + j, _m4.compose(_v.copy(dir).multiplyScalar(o.r), _q, _s.setScalar(1.1))); });
+  }
+  wheel.add(qParts.spokes, qParts.hubs);
+
+  // магнитные сопла вдоль джетов
+  const cg = new THREE.TorusGeometry(1, .08, 8, 48); cg.rotateX(Math.PI / 2);
+  const coils = new THREE.InstancedMesh(cg, coilMat, 20);
+  let ci = 0;
+  for (const s of [1, -1]) for (let i = 0; i < 10; i++) {
+    const y = 9 + i * 7.5, r = .35 + (4.5 - .35) * (y / 90) + 1.6;
+    coils.setMatrixAt(ci++, _m4.compose(_v.set(0, s * y, 0), _q.identity(), _s.setScalar(r)));
+  }
+  quasarRoot.add(coils);
+  for (const o of [qParts.spokes, qParts.hubs, coils]) { o.frustumCulled = false; o.instanceMatrix.needsUpdate = true; }
+  updateVis();
+}
+function rebuildQSwarm() {
+  disposeSwarm(qParts.swarm);
+  const n = Math.round(Q().panels * .9 * S.density), R = rng(4242);
+  const p0 = new Float32Array(n * 3), ax = new Float32Array(n * 3), par = new Float32Array(n * 4), sd = new Float32Array(n * 2);
+  for (let i = 0; i < n; i++) {
+    const r = 40 + Math.pow(R(), .9) * 34, phi = R() * Math.PI * 2, y = (R() - .5) * 2 * (.8 + r * .04);
+    const len = Math.hypot(r, y);
+    p0.set([Math.cos(phi) * r / len, y / len, Math.sin(phi) * r / len], i * 3);
+    ax.set([0, 1, 0], i * 3);
+    par.set([.108 * Math.pow(r / 40, -1.5), len, .6 + R() * .6, (r - 40) / 34 * .8 + R() * .2], i * 4);
+    sd[i * 2] = R(); sd[i * 2 + 1] = R() * 6.283;
+  }
+  qParts.swarm = makeSwarmMesh({ p0, ax, par, sd, n }, qPanelMat);
+  quasarRoot.add(qParts.swarm);
+}
+
+/* =====================================================================
+   ФИЗИКА ДЛЯ ОТОБРАЖЕНИЯ
+   ===================================================================== */
+let Rvis = 1;
+function starBand(st, m) {
+  const T = st.T, r = lam => planck(lam, T) / planck(lam, 5772);
+  switch (m) {
+    case 1: return Math.pow(r(10e-6), .4);
+    case 2: return Math.pow(r(1.6e-6), .35);
+    case 3: return Math.pow(r(2e-7), .22);
+    case 8: return Math.pow(r(6.563e-7), .35);
+    case 6: case 7: return .4 * Math.pow(T / 5772, .5);
+    default: return .05;
+  }
+}
+function shellAU() { const st = STARS[S.star]; return Math.sqrt(st.L) * (S.shell / 2.4) * st.shellK; }
+function shellTemp() {
+  if (isQ()) return 2200;
+  return 278.6 * Math.pow(STARS[S.star].L, .25) / Math.sqrt(shellAU());
+}
+function thermalBand(T, m) {
+  switch (m) {
+    case 1: return Math.min(3, Math.pow(planck(10e-6, T) / planck(10e-6, 280), .5));
+    case 2: return Math.min(3, Math.pow(planck(1.6e-6, T) / planck(1.6e-6, 280), .2) * .02);
+    case 6: return .3 * T / 280;
+    case 7: return .5 * T / 280;
+    default: return 0;
+  }
+}
+function coverage() {
+  if (isQ()) return S.build * .18 * (1 - Math.exp(-1.6 * S.density * S.size * S.size));
+  const base = { shell:.97, swarm:.5, rings:.22, hybrid:.6 }[S.type] || .5;
+  return S.build * (1 - Math.exp(-base * 2.5 * S.size * S.size * S.density * Math.sqrt(S.layers)));
+}
+function updateThermal() {
+  const T = shellTemp(), Lt = isQ() ? LQ : LS;
+  Lt.uThermal.value = thermalBand(T, S.mode);
+  bbC(T, Lt.uHotCol.value);
+  Lt.uHotVis.value = T > 900 ? Math.min(1, Math.pow((T - 900) / 1500, 1.5)) * .5 : 0;
+}
+function updateStarUniforms() {
+  const st = STARS[S.star]; if (st.id === 'quasar') return;
+  const u = starMat.uniforms;
+  bbC(st.T, u.uColMid.value); bbC(st.T * 1.13, u.uColHot.value); bbC(st.T * .84, u.uColCool.value);
+  u.uCell.value = st.cell * S.gran;
+  u.uSpots.value = S.spots; u.uFlare.value = S.flare; u.uBright.value = S.starBright;
+  u.uGrav.value = st.grav || 0; u.uSeed.value = st.seed;
+  const band = starBand(st, S.mode), act = st.xr * ACT_MODE[S.mode] * (S.mode === 6 ? (.4 + S.flare) : 1) + (S.mode === 5 ? S.flare * .4 : 0);
+  u.uBand.value = band; u.uAct.value = act;
+  const cu = coronaMat.uniforms;
+  bbC(st.T, cu.uCol.value); cu.uInt.value = S.corona * st.corona; cu.uBand.value = band; cu.uAct.value = act; cu.uScaleW.value = Rvis;
+  bbC(st.T, LS.uStarCol.value); LS.uStarI.value = S.starBright;
+}
+function updateQuasarUniforms() {
+  diskMat.uniforms.uInt.value = S.diskI; lensMat.uniforms.uInt.value = S.diskI;
+  diskMat.uniforms.uDop.value = S.doppler; lensMat.uniforms.uDop.value = S.doppler;
+  jetMat.uniforms.uInt.value = S.jetI; lobeMat.uniforms.uInt.value = S.jetI; coilMat.uniforms.uEm.value = .4 + .6 * S.jetI;
+  bbC(14000, LQ.uStarCol.value); LQ.uStarI.value = 1.2 * Math.max(.3, S.diskI);
+  updateVis();
+}
+
+/* =====================================================================
+   ПОСТОБРАБОТКА
+   ===================================================================== */
+let composer = null, bloomPass = null;
+function buildComposer() {
+  if (composer) { composer.renderTarget1.dispose(); composer.renderTarget2.dispose(); bloomPass.dispose(); }
+  const sz = renderer.getDrawingBufferSize(new THREE.Vector2());
+  const rt = new THREE.WebGLRenderTarget(sz.x, sz.y, { type:THREE.HalfFloatType, samples:Q().msaa });
+  composer = new EffectComposer(renderer, rt);
+  composer.addPass(new RenderPass(scene, camera));
+  bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), S.bloomStr, S.bloomRad, .8);
+  composer.addPass(bloomPass);
+  composer.addPass(new OutputPass());
+  composer.setPixelRatio(dpr);
+  composer.setSize(innerWidth, innerHeight);
+}
+function setDpr(v) {
+  dpr = Math.max(.5, Math.min(v, S.maxDpr, window.devicePixelRatio || 1));
+  renderer.setPixelRatio(dpr); renderer.setSize(innerWidth, innerHeight, false);
+  if (composer) { composer.setPixelRatio(dpr); composer.setSize(innerWidth, innerHeight); }
+  starsMat.uniforms.uDpr.value = dpr; blrMat.uniforms.uDpr.value = dpr;
+}
+function onResize() {
+  camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+  setDpr(dpr);
+}
+addEventListener('resize', onResize);
+addEventListener('orientationchange', () => setTimeout(onResize, 200));
+
+/* =====================================================================
+   РЕЖИМЫ, ЗВЁЗДЫ, КАЧЕСТВО
+   ===================================================================== */
+function applyMode(m) {
+  S.mode = m; G.uMode.value = m;
+  const p = MODES[m].pal || MODES[1].pal;
+  G.uP0.value.set(...p[0]); G.uP1.value.set(...p[1]); G.uP2.value.set(...p[2]); G.uP3.value.set(...p[3]);
+  for (const r of REG) { const v = r.table[m], u = r.mat.uniforms[r.key]; if (typeof v === 'number') u.value = v; else u.value.set(v[0], v[1], v[2]); }
+  updateStarUniforms(); updateThermal();
+  document.documentElement.style.setProperty('--acc', MODES[m].acc);
+  syncBars(); updateTitle(); updateSpecPane(); updateInfo(); save();
+}
+function presetOf(st) {
+  const p = st.preset;
+  if (st.id === 'quasar') return { density: 1, size: 1, build: 1 };
+  return { type:p.type, shell:p.shell, layers:p.layers || 2, density:p.density || 1, size:p.size || 1, build:p.build ?? 1,
+    frame: p.type === 'shell' || p.type === 'hybrid', ribbons: p.type === 'rings' || p.type === 'hybrid', spots:st.spots, flare:st.flare };
+}
+function fitDist() {
+  const R = isQ() ? 80 : Rvis * S.shell * 1.45;
+  const vf = THREE.MathUtils.degToRad(camera.fov) / 2, hf = Math.atan(Math.tan(vf) * camera.aspect);
+  return R / Math.sin(Math.min(vf, hf));
+}
+let flyTo = null;
+let last = performance.now(), orb = 0, starT = 0, buildCur = 0, buildAnim = true, wantShot = false;
+function applyStar(i, fromUser) {
+  S.star = i;
+  const st = STARS[i], q = st.id === 'quasar';
+  if (fromUser) Object.assign(S, presetOf(st));
+  starRoot.visible = !q; quasarRoot.visible = q;
+  if (!q) {
+    Rvis = 1.15 * Math.pow(st.R, .28);
+    starMesh.scale.set(Rvis, Rvis * (st.oblate || 1), Rvis);
+    structGroup.scale.setScalar(Rvis);
+    ghost.scale.setScalar(Rvis / st.R);
+    rebuildStructure();
+    controls.minDistance = Rvis * 1.25; controls.maxDistance = Rvis * S.shell * 14;
+  } else {
+    if (!qParts.wheel) buildQuasar();
+    rebuildQSwarm();
+    controls.minDistance = 3; controls.maxDistance = 600;
+  }
+  updateStarUniforms(); updateQuasarUniforms(); applyMode(S.mode);
+  panelMat.uniforms.uScale.value = qPanelMat.uniforms.uScale.value = S.size;
+  if (fromUser) { buildCur = 0; buildAnim = true; }
+  flyTo = fitDist();
+  syncBars(); buildSheet(); updateTitle(); updateInfo(); save();
+}
+function switchStar(i) {
+  if (i === S.star) return;
+  const f = $('#fade'); f.style.opacity = 1;
+  setTimeout(() => { applyStar(i, true); requestAnimationFrame(() => { f.style.opacity = 0; }); }, 330);
+}
+function applyQuality() {
+  const q = Q();
+  for (const m of ALL) { m.defines.OCT = q.oct; m.needsUpdate = true; }
+  starMesh.geometry.dispose(); starMesh.geometry = new THREE.SphereGeometry(1, q.seg, q.seg / 2 | 0);
+  buildStarfield(); bakeSky(); buildFrame();
+  if (isQ()) rebuildQSwarm(); else rebuildStructure();
+  setDpr(Math.min(q.dpr, S.maxDpr)); buildComposer();
+}
+
+/* =====================================================================
+   ИНТЕРФЕЙС
+   ===================================================================== */
+const el = (t, c, h) => { const e = document.createElement(t); if (c) e.className = c; if (h != null) e.innerHTML = h; return e; };
+function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('on'), 1600); }
+
+const specBar = $('#specBar'), starBar = $('#starBar');
+MODES.forEach((m, i) => { const b = el('button', 'chip', m.name); b.onclick = () => applyMode(i); specBar.appendChild(b); });
+STARS.forEach((s, i) => {
+  const b = el('button', 'card');
+  const dot = s.id === 'quasar' ? 'background:radial-gradient(circle,#000 30%,#9cf 38%,#f6c 60%,transparent 72%)' : `background:radial-gradient(circle at 35% 35%,#fff,${cssBB(s.T)} 55%);box-shadow:0 0 12px ${cssBB(s.T)}`;
+  b.innerHTML = `<span class="no">${i + 1}</span><div class="dot" style="${dot}"></div><div class="n">${s.short}</div><div class="k">${s.id === 'quasar' ? 'Режим 9 · AGN' : s.cls}</div>`;
+  b.onclick = () => switchStar(i);
+  starBar.appendChild(b);
+});
+function syncBars() {
+  [...specBar.children].forEach((b, i) => b.classList.toggle('on', i === S.mode));
+  [...starBar.children].forEach((b, i) => b.classList.toggle('on', i === S.star));
+  $('#bPlay').innerHTML = S.paused ? '<svg viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z"/></svg>' : '<svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg>';
+  $('#bCine').classList.toggle('on', S.cinema);
+  $('#fps').style.display = S.fps ? '' : 'none';
+  $('#vig').style.display = S.vignette ? '' : 'none';
+}
+function updateTitle() {
+  const st = STARS[S.star];
+  $('#title .nm').textContent = st.name;
+  $('#title .cl').textContent = st.id === 'quasar' ? `${st.cls} · ${st.dist}` : `${st.cls} · ${st.T} K · ${st.dist}`;
+  $('#title .md').textContent = `${MODES[S.mode].name} · ${MODES[S.mode].sub}`;
+}
+
+const TABS = [['struct','Структура'], ['star','Объект'], ['spec','Спектр'], ['gfx','Графика'], ['cam','Камера']];
+const pct = v => Math.round(v * 100) + '%', x2 = v => '×' + (+v).toFixed(2);
+const CTRL = [
+  { tab:'struct', t:'seg', k:'type', label:'Тип структуры', s:1, opts:[['swarm','Рой'],['rings','Кольца'],['shell','Оболочка'],['hybrid','Гибрид']] },
+  { tab:'struct', t:'range', k:'build', label:'Завершённость', min:0, max:1, step:.01, fmt:pct },
+  { tab:'struct', t:'range', k:'shell', label:'Радиус оболочки', s:1, min:1.6, max:4, step:.05, fmt:v => (+v).toFixed(2) + ' R★' },
+  { tab:'struct', t:'range', k:'density', label:'Плотность панелей', min:.3, max:2.5, step:.05, fmt:x2, heavy:1 },
+  { tab:'struct', t:'range', k:'size', label:'Размер панелей', min:.4, max:2, step:.05, fmt:x2 },
+  { tab:'struct', t:'range', k:'layers', label:'Слоёв', s:1, min:1, max:4, step:1, fmt:v => v | 0, heavy:1 },
+  { tab:'struct', t:'range', k:'orbit', label:'Скорость орбит', min:0, max:4, step:.05, fmt:x2 },
+  { tab:'struct', t:'range', k:'edge', label:'Свечение кромок', min:0, max:2.5, step:.05, fmt:x2 },
+  { tab:'struct', t:'toggle', k:'frame', label:'Геодезический каркас', s:1 },
+  { tab:'struct', t:'toggle', k:'hubs', label:'Узлы, фермы и спицы' },
+  { tab:'struct', t:'toggle', k:'beams', label:'Лучи передачи энергии', s:1 },
+  { tab:'struct', t:'toggle', k:'ribbons', label:'Несущие кольца' },
+  { tab:'struct', t:'btns', items:[['Строить с нуля', () => { buildCur = 0; buildAnim = true; toast('Строительство запущено'); }], ['Пресет объекта', () => { applyStar(S.star, true); toast('Пресет восстановлен'); }]] },
+  { tab:'struct', t:'hint', html:'Рой — независимые орбиты; кольца — пояса коллекторов; оболочка — жёсткая сфера; гибрид — кольца + полярные шапки + рой. Масштаб условный: реальная сфера в сотни раз больше звезды.' },
+
+  { tab:'star', t:'range', k:'gran', label:'Масштаб грануляции', s:1, min:.4, max:2.5, step:.05, fmt:x2 },
+  { tab:'star', t:'range', k:'conv', label:'Скорость конвекции', s:1, min:0, max:4, step:.05, fmt:x2 },
+  { tab:'star', t:'range', k:'spots', label:'Пятна и активность', s:1, min:0, max:1, step:.01, fmt:pct },
+  { tab:'star', t:'range', k:'flare', label:'Вспышки', s:1, min:0, max:1.5, step:.01, fmt:pct },
+  { tab:'star', t:'range', k:'corona', label:'Корона', s:1, min:0, max:2.5, step:.05, fmt:x2 },
+  { tab:'star', t:'range', k:'starBright', label:'Яркость звезды', s:1, min:.3, max:2.5, step:.05, fmt:x2 },
+  { tab:'star', t:'toggle', k:'ghost', label:'Контур Солнца для масштаба', s:1 },
+  { tab:'star', t:'range', k:'diskI', label:'Аккреционный диск', q:1, min:0, max:2.5, step:.05, fmt:x2 },
+  { tab:'star', t:'range', k:'doppler', label:'Релятивистский Доплер', q:1, min:0, max:1, step:.01, fmt:pct },
+  { tab:'star', t:'range', k:'jetI', label:'Джеты и радиолепестки', q:1, min:0, max:2.5, step:.05, fmt:x2 },
+  { tab:'star', t:'toggle', k:'torus', label:'Пылевой тор', q:1 },
+
+  { tab:'spec', t:'range', k:'gain', label:'Усиление ложного цвета', min:.2, max:3, step:.05, fmt:x2 },
+
+  { tab:'gfx', t:'seg', k:'quality', label:'Качество', opts:Object.entries(QUAL).map(([k, v]) => [k, v.name]) },
+  { tab:'gfx', t:'toggle', k:'bloom', label:'Свечение (bloom)' },
+  { tab:'gfx', t:'range', k:'bloomStr', label:'Сила свечения', min:0, max:2.5, step:.05, fmt:x2 },
+  { tab:'gfx', t:'range', k:'bloomRad', label:'Радиус свечения', min:0, max:1, step:.01, fmt:x2 },
+  { tab:'gfx', t:'range', k:'exposure', label:'Экспозиция', min:.3, max:2.5, step:.05, fmt:x2 },
+  { tab:'gfx', t:'toggle', k:'adaptive', label:'Адаптивное разрешение' },
+  { tab:'gfx', t:'range', k:'maxDpr', label:'Макс. плотность пикселей', min:.5, max:3, step:.05, fmt:x2 },
+  { tab:'gfx', t:'toggle', k:'sky', label:'Млечный Путь' },
+  { tab:'gfx', t:'toggle', k:'bgStars', label:'Звёзды фона' },
+  { tab:'gfx', t:'range', k:'skyI', label:'Яркость фона', min:0, max:2.5, step:.05, fmt:x2 },
+  { tab:'gfx', t:'toggle', k:'vignette', label:'Виньетка' },
+  { tab:'gfx', t:'toggle', k:'fps', label:'Показывать FPS' },
+  { tab:'gfx', t:'range', k:'timeScale', label:'Скорость времени', min:0, max:5, step:.05, fmt:x2 },
+  { tab:'gfx', t:'toggle', k:'paused', label:'Пауза' },
+
+  { tab:'cam', t:'toggle', k:'autoRot', label:'Автовращение' },
+  { tab:'cam', t:'range', k:'rotSpeed', label:'Скорость вращения', min:0, max:3, step:.05, fmt:x2 },
+  { tab:'cam', t:'toggle', k:'cinema', label:'Кинорежим' },
+  { tab:'cam', t:'range', k:'fov', label:'Угол обзора', min:25, max:95, step:1, fmt:v => (v | 0) + '°' },
+  { tab:'cam', t:'btns', items:[['Сброс вида', () => resetView()], ['Снимок PNG', () => { wantShot = true; }], ['Скрыть интерфейс', () => hideUI(true)], ['Сбросить всё', () => resetAll()]] },
+  { tab:'cam', t:'hint', html:'Жесты: один палец — вращение, два — зум. Двойной тап — сброс вида. На клавиатуре: 1–9 объекты, S — спектр, H — интерфейс, пробел — пауза.' },
+];
+const SYNC = {};
+let curTab = 'struct';
+function makeCtrl(c) {
+  if (c.t === 'hint') return el('div', 'hint', c.html);
+  if (c.t === 'btns') {
+    const w = el('div', 'btns');
+    for (const [l, f] of c.items) { const b = el('button', 'btn', l); b.onclick = f; w.appendChild(b); }
+    return w;
+  }
+  if (c.t === 'range') {
+    const row = el('div', 'row', `<div class="lb"><b>${c.label}</b><span></span></div><input type="range" min="${c.min}" max="${c.max}" step="${c.step}">`);
+    const inp = row.querySelector('input'), sp = row.querySelector('span');
+    const upd = () => { const v = S[c.k]; inp.value = v; sp.textContent = c.fmt ? c.fmt(v) : (+v).toFixed(2); inp.style.setProperty('--p', ((v - c.min) / (c.max - c.min) * 100) + '%'); };
+    upd();
+    inp.addEventListener('input', () => { S[c.k] = parseFloat(inp.value); upd(); if (!c.heavy) onSet(c.k); });
+    inp.addEventListener('change', () => { if (c.heavy) onSet(c.k); save(); });
+    SYNC[c.k] = upd; return row;
+  }
+  if (c.t === 'toggle') {
+    const row = el('div', 'row tg', `<b>${c.label}</b><label class="sw"><input type="checkbox"><i></i></label>`);
+    const inp = row.querySelector('input');
+    inp.checked = !!S[c.k];
+    inp.onchange = () => { S[c.k] = inp.checked; onSet(c.k); };
+    SYNC[c.k] = () => { inp.checked = !!S[c.k]; };
+    return row;
+  }
+  if (c.t === 'seg') {
+    const row = el('div', 'row', `<div class="lb"><b>${c.label}</b></div>`);
+    const seg = el('div', 'seg');
+    const upd = () => [...seg.children].forEach(b => b.classList.toggle('on', b.dataset.v === S[c.k]));
+    for (const [v, l] of c.opts) { const b = el('button', '', l); b.dataset.v = v; b.onclick = () => { S[c.k] = v; upd(); onSet(c.k); }; seg.appendChild(b); }
+    upd(); row.appendChild(seg); SYNC[c.k] = upd; return row;
+  }
+  return el('div');
+}
+function buildSheet() {
+  const q = isQ(), tabs = $('#tabs'), panes = $('#panes');
+  tabs.innerHTML = ''; panes.innerHTML = '';
+  for (const k in SYNC) delete SYNC[k];
+  for (const [id, name] of TABS) {
+    const t = el('button', 'tab' + (id === curTab ? ' on' : ''), id === 'star' ? (q ? 'Квазар' : 'Звезда') : name);
+    t.onclick = () => { curTab = id; [...tabs.children].forEach(x => x.classList.toggle('on', x === t)); [...panes.children].forEach(p => { p.hidden = p.dataset.tab !== id; }); panes.scrollTop = 0; };
+    tabs.appendChild(t);
+    const pane = el('div'); pane.dataset.tab = id; pane.hidden = id !== curTab;
+    if (id === 'spec') {
+      const grid = el('div', 'sgrid');
+      MODES.forEach((m, i) => {
+        const b = el('button', '', `<i style="background:${m.acc}"></i><b>${m.name}</b><span>${m.sub}</span>`);
+        b.style.setProperty('--c', m.acc); b.onclick = () => applyMode(i); grid.appendChild(b);
+      });
+      pane.appendChild(grid);
+      pane.appendChild(el('div', 'hint specDesc'));
+    }
+    for (const c of CTRL) {
+      if (c.tab !== id || (c.s && q) || (c.q && !q)) continue;
+      pane.appendChild(makeCtrl(c));
+    }
+    panes.appendChild(pane);
+  }
+  updateSpecPane();
+}
+function updateSpecPane() {
+  const g = document.querySelector('.sgrid'); if (!g) return;
+  [...g.children].forEach((b, i) => b.classList.toggle('on', i === S.mode));
+  const d = document.querySelector('.specDesc');
+  if (d) d.innerHTML = `<b style="color:var(--acc)">${MODES[S.mode].name}.</b> ${(isQ() ? MDQ : MDS)[S.mode]}`;
+}
+function syncAll() { for (const k in SYNC) SYNC[k](); syncBars(); }
+
+function onSet(k) {
+  switch (k) {
+    case 'type': Object.assign(S, { frame: S.type === 'shell' || S.type === 'hybrid', ribbons: S.type === 'rings' || S.type === 'hybrid' }); syncAll(); rebuildStructure(); break;
+    case 'layers': rebuildStructure(); break;
+    case 'density': if (isQ()) rebuildQSwarm(); else rebuildStructure(); break;
+    case 'shell': updateShell(); updateThermal(); controls.maxDistance = Rvis * S.shell * 14; break;
+    case 'size': panelMat.uniforms.uScale.value = qPanelMat.uniforms.uScale.value = S.size; break;
+    case 'frame': case 'hubs': case 'beams': case 'ribbons': case 'torus': updateVis(); break;
+    case 'edge': LS.uEdge.value = LQ.uEdge.value = S.edge; break;
+    case 'gran': case 'spots': case 'flare': case 'corona': case 'starBright': updateStarUniforms(); break;
+    case 'ghost': ghost.visible = S.ghost; break;
+    case 'diskI': case 'doppler': case 'jetI': updateQuasarUniforms(); break;
+    case 'gain': G.uGain.value = S.gain; break;
+    case 'quality': applyQuality(); toast('Качество: ' + Q().name); break;
+    case 'bloomStr': case 'bloomRad': bloomPass.strength = S.bloomStr; bloomPass.radius = S.bloomRad; break;
+    case 'exposure': renderer.toneMappingExposure = S.exposure; break;
+    case 'maxDpr': setDpr(S.maxDpr); break;
+    case 'sky': sky.visible = S.sky; break;
+    case 'bgStars': if (bgStars) bgStars.visible = S.bgStars; break;
+    case 'skyI': skyMat.uniforms.uSkyI.value = S.skyI; starsMat.uniforms.uInt.value = Math.min(1.5, S.skyI); break;
+    case 'vignette': case 'fps': case 'paused': syncBars(); break;
+    case 'autoRot': case 'rotSpeed': controls.autoRotate = S.autoRot; controls.autoRotateSpeed = S.rotSpeed; break;
+    case 'fov': camera.fov = S.fov; camera.updateProjectionMatrix(); break;
+    case 'cinema': setCinema(S.cinema); syncBars(); break;
+  }
+  if (['build','shell','density','size','type','layers'].includes(k)) updateInfo();
+  save();
+}
+
+const infoEl = $('#info');
+function row(a, b) { return `<tr><td>${a}</td><td>${b}</td></tr>`; }
+function updateInfo() {
+  if (infoEl.classList.contains('hid')) return;
+  const st = STARS[S.star], q = st.id === 'quasar';
+  let h = `<div class="ih"><b>${st.name}</b><span>${st.en}</span></div><div class="fact">${st.fact}</div><table>`;
+  const cov = coverage();
+  if (!q) {
+    h += row('Спектральный класс', st.cls) + row('Температура', st.T.toLocaleString('ru-RU') + ' K') + row('Радиус', sci(st.R) + ' R☉')
+      + row('Светимость', sci(st.L) + ' L☉') + row('Масса', sci(st.M) + ' M☉') + row('Расстояние', st.dist)
+      + row('Пик излучения', Math.round(2.898e6 / st.T) + ' нм');
+    if (st.R !== 1) h += row('Солнце в масштабе', st.R > 1 ? '1/' + sci(st.R, 1) : '×' + sci(1 / st.R, 1));
+    h += '</table><div class="sec">Мегаструктура</div><table>';
+    const r = shellAU(), T = shellTemp(), P = st.L * 3.828e26 * cov, area = 4 * Math.PI * Math.pow(r * 1.496e11, 2) * cov;
+    h += row('Тип', { swarm:'Рой Дайсона', rings:'Кольца Дайсона', shell:'Оболочка', hybrid:'Гибрид' }[S.type])
+      + row('Радиус (реальный)', sci(r) + ' а.е.') + row('Температура радиаторов', Math.round(T) + ' K')
+      + row('Пик теплового излучения', (2898 / T).toFixed(1) + ' мкм') + row('Перехват света', (cov * 100).toFixed(1) + '%')
+      + row('Мощность', sci(P) + ' Вт') + row('Уровень Кардашёва', P > 0 ? ((Math.log10(P) - 6) / 10).toFixed(2) : '—')
+      + row('Площадь коллекторов', sci(area / 1e6) + ' км²') + row('Масса (1 кг/м²)', sci(area) + ' кг')
+      + row('Панелей на экране', (swarm ? swarm.geometry.instanceCount : 0).toLocaleString('ru-RU'));
+  } else {
+    const Lq = 4e12, rAU = 53 * 600, P = Lq * 3.828e26 * (cov + .08 * S.jetI);
+    h += row('Масса дыры', '8.9·10⁸ M☉') + row('Радиус Шварцшильда', '≈17.5 а.е.') + row('Светимость', '≈4·10¹² L☉')
+      + row('Красное смещение', 'z = 0.158') + row('Расстояние', st.dist);
+    h += '</table><div class="sec">Двигатель Пенроуза–Кардашёва</div><table>';
+    h += row('Состав', 'рой + 3 кольца + сопла') + row('Радиус колеса (реальный)', '≈' + sci(rAU, 1) + ' а.е.')
+      + row('Температура радиаторов', '≈2200 K') + row('Перехват диска', (cov * 100).toFixed(1) + '%')
+      + row('Отбор энергии джетов', (8 * S.jetI).toFixed(0) + '%') + row('Мощность', sci(P) + ' Вт')
+      + row('Уровень Кардашёва', P > 0 ? ((Math.log10(P) - 6) / 10).toFixed(2) : '—')
+      + row('Коллекторов на экране', (qParts.swarm ? qParts.swarm.geometry.instanceCount : 0).toLocaleString('ru-RU'));
+  }
+  h += `</table><div class="sec">Спектр · ${MODES[S.mode].name}</div><div class="fact">${(q ? MDQ : MDS)[S.mode]}</div>`;
+  infoEl.innerHTML = h;
+}
+
+const sheet = $('#sheet');
+$('#bSet').onclick = () => sheet.classList.toggle('open');
+$('#bClose').onclick = $('#grab').onclick = () => sheet.classList.remove('open');
+$('#bInfo').onclick = () => { infoEl.classList.toggle('hid'); $('#bInfo').classList.toggle('on', !infoEl.classList.contains('hid')); updateInfo(); };
+$('#bShot').onclick = () => { wantShot = true; };
+$('#bHide').onclick = () => hideUI(true);
+$('#restore').onclick = () => hideUI(false);
+$('#bPlay').onclick = () => { S.paused = !S.paused; syncAll(); };
+$('#bCine').onclick = () => { S.cinema = !S.cinema; setCinema(S.cinema); syncAll(); };
+$('#bReset').onclick = () => resetView();
+function hideUI(v) { document.body.classList.toggle('noui', v); if (v) sheet.classList.remove('open'); }
+function resetView() {
+  S.cinema = false; setCinema(false); syncAll();
+  const d = fitDist();
+  camera.position.set(0, d * .22, d);
+  controls.target.set(0, 0, 0); controls.update(); flyTo = null;
+}
+function resetAll() {
+  const keep = { star:S.star, mode:S.mode };
+  Object.assign(S, DEF, keep);
+  renderer.toneMappingExposure = S.exposure; G.uGain.value = S.gain;
+  skyMat.uniforms.uSkyI.value = S.skyI; starsMat.uniforms.uInt.value = 1; sky.visible = S.sky; ghost.visible = S.ghost;
+  LS.uEdge.value = LQ.uEdge.value = S.edge;
+  controls.autoRotate = S.autoRot; controls.autoRotateSpeed = S.rotSpeed; camera.fov = S.fov; camera.updateProjectionMatrix();
+  applyQuality(); applyStar(S.star, true); toast('Настройки сброшены');
+}
+let cineT = 0;
+function setCinema(v) { controls.enabled = !v; }
+
+// жесты: двойной тап — сброс вида, касание — выход из кинорежима
+let lastTap = 0, downPos = null;
+canvas.addEventListener('pointerdown', e => {
+  downPos = [e.clientX, e.clientY];
+  if (S.cinema) { S.cinema = false; setCinema(false); syncAll(); }
+  flyTo = null;
+});
+canvas.addEventListener('pointerup', e => {
+  if (!downPos || Math.hypot(e.clientX - downPos[0], e.clientY - downPos[1]) > 12) return;
+  const now = performance.now();
+  if (now - lastTap < 320) { resetView(); lastTap = 0; } else lastTap = now;
+  if (sheet.classList.contains('open') && e.pointerType === 'touch') sheet.classList.remove('open');
+});
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  const n = parseInt(e.key, 10);
+  if (n >= 1 && n <= 9) switchStar(n - 1);
+  else if (e.key === 's' || e.key === 'S' || e.key === 'ы') applyMode((S.mode + 1) % MODES.length);
+  else if (e.key === 'h' || e.key === 'H' || e.key === 'р') hideUI(!document.body.classList.contains('noui'));
+  else if (e.key === ' ') { S.paused = !S.paused; syncAll(); e.preventDefault(); }
+});
+document.addEventListener('visibilitychange', () => { last = performance.now(); });
+
+/* =====================================================================
+   ЦИКЛ
+   ===================================================================== */
+let frames = 0, fpsT = 0, goodSec = 0, firstFrame = true;
+const _sph = new THREE.Spherical(), _nW = new THREE.Vector3(0, 1, 0), _tc = new THREE.Vector3(), _e = new THREE.Vector3(), _vel = new THREE.Vector3(), _nv = new THREE.Vector3();
+
+function frame(now) {
+  requestAnimationFrame(frame);
+  if (document.hidden) return;
+  const dt = Math.min((now - last) / 1000, .1); last = now;
+  const ts = S.paused ? 0 : S.timeScale;
+  G.uTime.value += dt * ts;
+  orb += dt * ts * S.orbit;
+  const st = STARS[S.star], q = st.id === 'quasar';
+  if (!q) starT += dt * ts * S.conv * st.conv;
+
+  if (buildAnim) { buildCur = Math.min(S.build, buildCur + dt * Math.max(ts, .3) * .09); if (buildCur >= S.build) buildAnim = false; }
+  else buildCur += (S.build - buildCur) * Math.min(1, dt * 4);
+  panelMat.uniforms.uBuild.value = qPanelMat.uniforms.uBuild.value = buildCur;
+  panelMat.uniforms.uOrb.value = qPanelMat.uniforms.uOrb.value = orb;
+  starMat.uniforms.uST.value = starT;
+
+  if (!q) {
+    frameGroup.rotation.y = orb * (S.type === 'shell' ? SHELL_SPEED : .05);
+    for (const r of ribbons) { _q.setFromAxisAngle(Yax, orb * RING_SPEED * Math.pow(1 + r.userData.i * .012, -1.5)); r.quaternion.copy(r.userData.q).multiply(_q); }
+  } else if (qParts.wheel) {
+    qParts.wheel.rotation.y = orb * .015;
+  }
+
+  if (S.cinema) {
+    cineT += dt;
+    _sph.setFromVector3(camera.position);
+    _sph.theta += dt * .12;
+    _sph.phi = THREE.MathUtils.lerp(_sph.phi, Math.PI / 2 - .15 + Math.sin(cineT * .13) * .55, dt * .5);
+    _sph.radius = THREE.MathUtils.lerp(_sph.radius, fitDist() * (.55 + .55 * (.5 + .5 * Math.sin(cineT * .09))), dt * .4);
+    _sph.makeSafe();
+    camera.position.setFromSpherical(_sph); camera.lookAt(0, 0, 0);
+  } else {
+    if (flyTo) {
+      const d = camera.position.length(), nd = THREE.MathUtils.lerp(d, flyTo, 1 - Math.exp(-dt * 3));
+      camera.position.setLength(nd);
+      if (Math.abs(nd - flyTo) < flyTo * .005) flyTo = null;
+    }
+    controls.update();
+  }
+  camera.updateMatrixWorld();
+  skyGroup.position.copy(camera.position);
+
+  // линзирование: нормаль диска и приближающаяся сторона в экранных координатах
+  if (q) {
+    _nv.copy(_nW).transformDirection(camera.matrixWorldInverse);
+    lensMat.uniforms.uNv.value.copy(_nv);
+    _tc.copy(camera.position).normalize();
+    _e.crossVectors(_tc, _nW); if (_e.lengthSq() < 1e-6) _e.set(1, 0, 0); _e.normalize();
+    _vel.crossVectors(_nW, _e);
+    if (_vel.dot(_tc) < 0) _e.negate();
+    _e.transformDirection(camera.matrixWorldInverse);
+    lensMat.uniforms.uAppr.value.set(_e.x, _e.y).normalize();
+  }
+
+  if (S.bloom) composer.render(); else renderer.render(scene, camera);
+
+  if (wantShot) {
+    wantShot = false;
+    canvas.toBlob(b => { if (!b) return; const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `dyson-${st.id}-${Date.now()}.png`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); toast('Снимок сохранён'); });
+  }
+  if (firstFrame) { firstFrame = false; const l = $('#loader'); l.style.opacity = 0; setTimeout(() => l.remove(), 700); }
+
+  frames++; fpsT += dt;
+  if (fpsT >= 1) {
+    const fps = frames / fpsT; frames = 0; fpsT = 0;
+    if (S.fps) $('#fps').textContent = `${fps.toFixed(0)} fps · ${dpr.toFixed(2)}x`;
+    if (S.adaptive) {
+      if (fps < 42 && dpr > .6) { setDpr(dpr - .15); goodSec = 0; }
+      else if (fps > 57) { if (++goodSec >= 3 && dpr < Math.min(S.maxDpr, Q().dpr, window.devicePixelRatio || 1) - .01) { setDpr(dpr + .1); goodSec = 0; } }
+      else goodSec = 0;
+    }
+    if (!infoEl.classList.contains('hid')) updateInfo();
+  }
+}
+
+/* =====================================================================
+   СТАРТ
+   ===================================================================== */
+sky.visible = S.sky;
+skyMat.uniforms.uSkyI.value = S.skyI;
+buildStarfield(); bakeSky(); buildFrame(); buildComposer();
+applyStar(S.star, false);
+resetView();
+syncAll();
+requestAnimationFrame(t => { last = t; frame(t); });
+</script>
+</body>
+</html>
